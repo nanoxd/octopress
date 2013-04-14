@@ -4,10 +4,10 @@ require "stringex"
 
 ## -- Rsync Deploy config -- ##
 # Be sure your public key is listed in your server's ~/.ssh/authorized_keys file
-ssh_user       = "user@domain.com"
+ssh_user       = "nano@208.68.38.228"
 ssh_port       = "22"
-document_root  = "~/website.com/"
-rsync_delete   = false
+document_root  = "/var/www/blog.nanoxd.net/public_html"
+rsync_delete   = true
 rsync_args     = ""  # Any extra arguments to pass to rsync
 deploy_default = "rsync"
 
