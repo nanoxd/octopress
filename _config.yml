@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://nanoxd.net
+url: http://blog.nanoxd.net
 title: NanoXD's Random Ramblings
 subtitle: A blog where I can express myself.
 author: Fernando Paredes
@@ -27,7 +27,7 @@ email:
 
 # If publishing to a subdirectory as in http://site.com/project set 'root: /project'
 root: /
-permalink: /blog/:year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
 source: source
 destination: public
 plugins: plugins
