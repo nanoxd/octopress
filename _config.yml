@@ -89,7 +89,10 @@ disqus_short_name: nanoxd
 disqus_show_comment_count: true
 
 # Google Analytics
-google_analytics_tracking_id: UA-40019118-1
+google_analytics_tracking_id:
 
 # Facebook Like
 facebook_like: false
+
+# Gaug.es Analytics
+gauges_analytics_tracking_id: 5169d833f5a1f57960000072
