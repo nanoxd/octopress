@@ -22,7 +22,10 @@ aside.sidebar {
   img {
     @extend .flex-content;
     @extend .basic-alignment;
-    @include shadow-box($border: #fff .3em solid);
+    // @include shadow-box($border: #fff .3em solid);
+  }
+  img.about {
+
   }
   ul {
     margin-bottom: 0.5em;
