@@ -10,7 +10,7 @@ While I've only been using git for several years, I have not had the pleasure of
 I've since tried to change that by getting a better feel of the VCS. Here are a few of the commands that I either didn't know or love to use:
 
 ##Amending a commit
-How many times have you inadvertantly forgotten to include a file in your last commit? I know my [Github](http://github.com) can attest to that.
+How many times have you inadvertantly forgotten to include a file in your last commit? I know my [Github](http://github.com) can attest to my forgetfullness. We will first start out by creating a file named `help.rb`
 
 ```bash
 git add help.rb
@@ -29,6 +29,7 @@ You can now add it back to the list of tracked files and amend your commit using
 git add help.rb
 git commit --amend -m "Add contact information to help file"
 ```
+
 
 ##References
 + [Git-SCM](http://git-scm.com/book/en/Git-Basics-Undoing-Things)
