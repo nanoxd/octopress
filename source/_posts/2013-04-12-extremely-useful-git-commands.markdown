@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Extremely useful git commands"
+title: "Ammending git commits"
 date: 2013-04-12 08:11
 comments: true
 categories: git
@@ -19,23 +19,24 @@ earth can help the man with the wrong mental attitude.
 {% endcodeblock %}
 
 ```bash
-git add help.rb
+git add help.md
 git commit -m "Add help file"
 ```
 
 It seems we forgot to include some text in the help file. To fix it we will append the information to the end of the file using the `echo` command.
 
 ```bash
-echo 'You can also contact me at foo@bar.com' >> hello.rb
+echo 'You can also contact me at foo@bar.com' >> hello.md
 ```
 
 You can now add it back to the list of tracked files and amend your commit using the following
 
 ```bash
-git add help.rb
+git add help.md
 git commit --amend -m "Add contact information to help file"
 ```
 
+Congratulations, you have successfully amended a commit!
 
 ##References
 + [Git-SCM](http://git-scm.com/book/en/Git-Basics-Undoing-Things)
