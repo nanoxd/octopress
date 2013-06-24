@@ -9,7 +9,7 @@ categories: [postgres, SQL, Rails, Setup]
 
 There are a myriad of ways to install PostgreSQL on a Mac. I will be going over `brew` and __Postgres.app__. I like to go with the app as it eases into my workflow but does require it's path to be set in your profile (e.g `.zshrc`, `.bashrc`, or `fish.config`)
 
-#### Homebrew Installation
+### Homebrew Installation
 
 The homebrew installation is very straightforward and can be done by following the guide below.
 
@@ -27,7 +27,7 @@ alias pg-start='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/ser
 alias pg-stop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
 ```
 
-#### Postgres.app Installation
+### Postgres.app Installation
 
 1. Visit http://postgresapp.com
 2. Download the latest version which as of this writing is `9.2.4.1`
@@ -46,11 +46,11 @@ The path should look like what was entered above but if all else fails restart y
 
 Now that you've successfully installed PG, you can utilize it in rails by including it in your gemfile.
 
-#### New Rails App
+### New Rails App
 If you have yet to generate your rails app, you can set Postgresql as your database by running `rails new blog -d postgresql`
 You will then have to run `rake db:create:all` to create the databases in the `database.yml` file.
 
-#### Existing Rails App
+### Existing Rails App
 For an existing rails app you will need to add the `pg` gem to your gemfile like so.
 
 ```ruby Gemfile
