@@ -5,7 +5,7 @@ date: 2013-06-23 21:53
 comments: true
 categories: [Rails, PostgreSQL, Ruby, Setup, RVM, Ubuntu, DevOps, Passenger, Nginx] 
 ---
-When you first start learning _Ruby_ or _Rails_ you are expected to learn many different languages at a time. When it comes to deploying that application you hit a crossroad. Will you use a site like [Heroku](https://www.heroku.com/) or try your luck at a VPS? For small applications, a cost-comparison will yield Heroku the prime candidate but once you need more dynos it quickly becomes cost-prohibitive. VPS are an unyielding dragon that quickly breathe fire at a newcomer with it's extensibility. This guide aims to help in lowering the burden and making VPS more accessible to everyone. 
+When you first start learning _Ruby_ or _Rails_ you are expected to learn many different languages at a time. When it comes to deploying that application you hit a crossroad. Will you use a site like [Heroku](https://www.heroku.com/) or try your luck at a VPS? For small applications, a cost-comparison will yield Heroku the prime candidate but once you need more dynos it quickly becomes cost-prohibitive. VPSs are an unyielding dragon that quickly breathe fire at a newcomer with it's extensibility. This guide aims to help in lowering the burden and making VPS more accessible to everyone. 
 
 _Notice: This guide is only meant as a starting point._ 
 
@@ -150,16 +150,17 @@ Installing Rails is very simple, the only hard part is deciding what version you
 Great! You picked the battle-tested Rails 3.2, which means less typing!
 
 ```
-$ gem install rails
+$ gem install rails --version 3.2.13
 ```
 
 To verify the version installed run ```rails -v```
 
 #### Rails 4
+__Update: Rails 4 was released today on June 25th, 2013__
 So you want to see what the hype is about? What are Turbolinks and Strong Parameters? Maybe you like to play with the Russian Doll Caching. Whatever it is, we can install it using:
 
 ```
-$ gem install rails --version 4.0.0.rc2 --no-ri --no-rdoc
+$ gem install rails
 ```
 
 Let's run `rails -v` to verify our version number matches 4.0.0 RC2. 
