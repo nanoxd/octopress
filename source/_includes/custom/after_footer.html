@@ -1,5 +1,8 @@
 <script type="text/javascript">
   var GoSquared = {};
+  GoSquared.load = function(theTracker){
+  if(/localhost/.test(location.hostname)) theTracker.Cancel();
+};
   GoSquared.acct = "GSN-830135-N";
   (function(w){
     function gs(){
