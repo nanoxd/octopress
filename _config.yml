@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://blog.nanoxd.net
+url: http://blog.fdp.io
 title: NanoXD's Random Ramblings
 subtitle: Random ramblings
 author: Fernando Paredes
@@ -102,9 +102,6 @@ google_analytics_tracking_id: UA-40019118-1
 
 # Facebook Like
 facebook_like: false
-
-# Gaug.es Analytics
-gauges_analytics_tracking_id: 5169d833f5a1f57960000072
 
 navigation:
 - text: Home

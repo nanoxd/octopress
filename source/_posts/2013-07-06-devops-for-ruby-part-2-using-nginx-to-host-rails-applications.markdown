@@ -5,7 +5,7 @@ date: 2013-07-06 19:26
 comments: true
 categories: [DevOps, Nginx, VPS, Ruby, Rails, PostgreSQL]
 ---
-In [DevOps for Ruby Part 1](http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/), we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.
+In [DevOps for Ruby Part 1](http://blog.fdp.io/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/), we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.
 
 
 ## Objectives
@@ -123,27 +123,27 @@ http {
 }
 ```
 
-The two Passenger settings that have to suit your machine are:  
-`passenger_root` - Specifies where Passenger is  
+The two Passenger settings that have to suit your machine are:
+`passenger_root` - Specifies where Passenger is
 `passenger_ruby` - Tells Passenger what version of Ruby to use.
 
 We created two server settings for each application. Here is what each setting means:
 
 ```
 # What port does this server listen to?
-listen       80; 
+listen       80;
 
 # Default charset to use.
-charset utf-8; 
+charset utf-8;
 
 # What domain will I route to this application?
-server_name  fdp.io; 
+server_name  fdp.io;
 
 # The root of the application, for Rails apps it's always the public folder.
-root /var/www/fdpio/public; 
+root /var/www/fdpio/public;
 
 # Let Passenger handle the Rails application.
-passenger_enabled on; 
+passenger_enabled on;
 
 # Set the RAILS_ENV variable to 'production'.
 rails_env production;
