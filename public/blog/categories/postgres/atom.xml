@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: postgres | NanoXD's Random Ramblings]]></title>
+  <link href="http://blog.nanoxd.net/blog/categories/postgres/atom.xml" rel="self"/>
+  <link href="http://blog.nanoxd.net/"/>
+  <updated>2013-08-25T07:56:12-07:00</updated>
+  <id>http://blog.nanoxd.net/</id>
+  <author>
+    <name><![CDATA[Fernando Paredes]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Setup PostgreSQL for Rails on a Mac]]></title>
+    <link href="http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac/"/>
+    <updated>2013-05-23T14:57:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac</id>
+    <content type="html"><![CDATA[<h2>Pick your elephant poison</h2>
+
+<p>There are a myriad of ways to install PostgreSQL on a Mac. I will be going over <code>brew</code> and <strong>Postgres.app</strong>. I like to go with the app as it eases into my workflow but does require it&rsquo;s path to be set in your profile (e.g <code>.zshrc</code>, <code>.bashrc</code>, or <code>fish.config</code>)</p>
+
+<h3>Homebrew Installation</h3>
+
+<p>The homebrew installation is very straightforward and can be done by following the guide below.</p>
+
+<ul>
+<li>Run a brew command to install PG and take note of the documentation that follows it.
+<code>bash
+brew install postgresql
+</code></li>
+<li>If this is your first install run the following command to create your first database
+<code>bash
+initdb /usr/local/var/postgres -E utf8
+</code></li>
+<li>Create aliases to simplify the start and stop of the Postgres service
+<code>bash
+alias pg-start='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
+alias pg-stop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
+</code></li>
+</ul>
+
+
+<h3>Postgres.app Installation</h3>
+
+<ol>
+<li>Visit <a href="http://postgresapp.com">http://postgresapp.com</a></li>
+<li>Download the latest version which as of this writing is <code>9.2.4.1</code></li>
+<li>Drag, drop, and open the elephant icon into the Application folder.</li>
+<li>Set the follwing in your <code>.bashrc</code> or<code>.zshrc</code>
+<code>
+ PATH="/Applications/Postgres.app/Contents/MacOS/bin:$PATH"
+ # If you are using Fish, use the following:
+ set PATH /Applications/Postgres.app/Contents/MacOS/bin $PATH
+</code></li>
+<li>Open the elephant and verify it is referencing the app using <code>which psql</code></li>
+</ol>
+
+
+<p>The path should look like what was entered above but if all else fails restart your terminal session.</p>
+
+<h2>Use Postgres in Rails</h2>
+
+<p>Now that you&rsquo;ve successfully installed PG, you can utilize it in rails by including it in your gemfile.</p>
+
+<h3>New Rails App</h3>
+
+<p>If you have yet to generate your rails app, you can set Postgresql as your database by running <code>rails new blog -d postgresql</code>
+You will then have to run <code>rake db:create:all</code> to create the databases in the <code>database.yml</code> file.</p>
+
+<h3>Existing Rails App</h3>
+
+<p>For an existing rails app you will need to add the <code>pg</code> gem to your gemfile like so.</p>
+
+<p>```ruby Gemfile
+source &lsquo;<a href="https://rubygems.org">https://rubygems.org</a>&rsquo;</p>
+
+<p>gem &lsquo;rails&rsquo;, &lsquo;4.0.0.rc1&rsquo;
+gem &ldquo;pg&rdquo;, &ldquo;~> 0.15.1&rdquo;</p>
+
+<p>gem &lsquo;sass-rails&rsquo;, &lsquo;~> 4.0.0.rc1&rsquo;
+gem &lsquo;uglifier&rsquo;, &lsquo;>= 1.3.0&rsquo;
+gem &lsquo;coffee-rails&rsquo;, &lsquo;~> 4.0.0&rsquo;
+gem &lsquo;jquery-rails&rsquo;
+gem &lsquo;turbolinks&rsquo;
+```</p>
+
+<p>You will also need to change your database.yml file to look something like this:</p>
+
+<p>```yml database.yml
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: blog_dev
+  host: localhost
+test:
+  adapter: postgresql
+  encoding: utf8
+  database: blog_test
+  host: localhost</p>
+
+<p>production:
+  adapter: postgresql
+  encoding: utf8
+  database: blog_production
+  host: supersecretserver
+```</p>
+
+<p>Finally, you can run <code>rake db:create:all</code> followed by <code>rake db:migrate</code> and continue editing your amazing rails app!</p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscasts Ep. 342</a></li>
+<li><a href="http://postgresapp.com/">Postgres.app</a></li>
+<li><a href="http://rubygems.org/gems/pg">PG Gem</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

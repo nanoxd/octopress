@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: git | NanoXD's Random Ramblings]]></title>
+  <link href="http://blog.nanoxd.net/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://blog.nanoxd.net/"/>
+  <updated>2013-08-25T07:56:12-07:00</updated>
+  <id>http://blog.nanoxd.net/</id>
+  <author>
+    <name><![CDATA[Fernando Paredes]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ammending git commits]]></title>
+    <link href="http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands/"/>
+    <updated>2013-04-12T08:11:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands</id>
+    <content type="html"><![CDATA[<p>During the past few years of using git, I&rsquo;ve come across several commands which have become pivotal in my workflow. One of them is <code>git commit --amend</code>.</p>
+
+<h2>Amending a commit</h2>
+
+<p>How many times have you inadvertantly forgotten to include a file in your last commit? I know my <a href="http://github.com">Github</a> can attest to my forgetfullness. We will first start out by creating a file named <code>help.md</code></p>
+
+<p>{% codeblock %}</p>
+
+<h1>Help</h1>
+
+<p>Nothing can stop the man with the right mental attitude from achieving his goal; nothing on
+earth can help the man with the wrong mental attitude.
+{% endcodeblock %}</p>
+
+<p><code>bash
+git add help.md
+git commit -m "Add help file"
+</code></p>
+
+<p>It seems we forgot to include some text in the help file. To fix it we will append the information to the end of the file using the <code>echo</code> command.</p>
+
+<p><code>bash
+echo 'You can also contact me at foo@bar.com' &gt;&gt; hello.md
+</code></p>
+
+<p>You can now add it back to the list of tracked files and amend your commit using the following</p>
+
+<p><code>bash
+git add help.md
+git commit --amend -m "Add contact information to help file"
+</code></p>
+
+<p>Congratulations, you have successfully amended a commit!</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://git-scm.com/book/en/Git-Basics-Undoing-Things">Git-SCM</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

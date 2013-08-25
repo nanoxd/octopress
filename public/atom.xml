@@ -1,0 +1,1071 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[NanoXD's Random Ramblings]]></title>
+  <link href="http://blog.nanoxd.net/atom.xml" rel="self"/>
+  <link href="http://blog.nanoxd.net/"/>
+  <updated>2013-08-25T07:56:11-07:00</updated>
+  <id>http://blog.nanoxd.net/</id>
+  <author>
+    <name><![CDATA[Fernando Paredes]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Make iTerm 2 work with Mac OSX movement keyboard shortcuts]]></title>
+    <link href="http://blog.nanoxd.net/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/"/>
+    <updated>2013-08-04T12:17:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts</id>
+    <content type="html"><![CDATA[<p>After transitioning from Terminal to iTerm 2, you may notice commands like &#8997; + &#8592; (moves left one word) and &#8984; + &#8592; (moves to the beginning of the line) no longer work.</p>
+
+<p>It is very simple process to add the keyboard shortcuts to your profile. Here are the keyboard shortcuts we are adding:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th align="center"> Keyboard Shortcut </th>
+<th align="center">            Description            </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td align="center"> &#8997; + &#8592; </td>
+<td align="center"> Move one word to the left         </td>
+</tr>
+<tr>
+<td></td>
+<td align="center"> &#8997; + &#8594; </td>
+<td align="center"> Move one word to the right        </td>
+</tr>
+<tr>
+<td></td>
+<td align="center"> &#8984; + &#8592; </td>
+<td align="center"> Move to the beginning of the line </td>
+</tr>
+<tr>
+<td></td>
+<td align="center"> &#8984; + &#8594; </td>
+<td align="center"> Move to the end of the line       </td>
+</tr>
+</tbody>
+</table>
+
+
+<h4>1. Open Preferences</h4>
+
+<p><img class="center" src="http://f.cl.ly/items/3f3m200t0h3x2o1F3C07/Image%202013.08.04%2012%3A44%3A16%20PM.png" title="'iTerm Preferences'" ></p>
+
+<h4>2. Click on Profiles</h4>
+
+<p>Find the Keys header and click on the <code>+</code> sign to add a new shortcut key.</p>
+
+<p><img src="http://f.cl.ly/items/0M1L3D0T1K0s0w083K0g/Image%202013.08.04%201%3A12%3A54%20PM.png"></p>
+
+<h4>3. Add Keyboard shortcuts</h4>
+
+<p>Enter each of the following shortcuts below:</p>
+
+<p><img src="http://f.cl.ly/items/1A3z3a1r1j0i1R1F1G1K/Image%202013.08.04%201%3A16%3A54%20PM.png" title="'Option + Left'" ></p>
+
+<p><img src="http://f.cl.ly/items/262F1F2y3E0X021I2d3v/Image%202013.08.04%201%3A26%3A57%20PM.png" title="'Option + Right'" ></p>
+
+<p><img src="http://f.cl.ly/items/1l3G0d2A0n1X0r1V0h3s/Image%202013.08.04%201%3A21%3A29%20PM.png" title="'Command + Left'" ></p>
+
+<p><img src="http://f.cl.ly/items/223X1L3H1M1p2P2U1C3x/Image%202013.08.04%201%3A22%3A54%20PM.png" title="'Command + Right" ></p>
+
+<p>Congratulations, you can now move around in iTerm 2 just like Terminal!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps for Ruby Part 2: Using Nginx to Host Rails Applications]]></title>
+    <link href="http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/"/>
+    <updated>2013-07-06T19:26:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications</id>
+    <content type="html"><![CDATA[<p>In <a href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
+
+<h2>Objectives</h2>
+
+<p>The goal of this tutorial is to:</p>
+
+<ul>
+<li>Create the necessary folders to host our web applications</li>
+<li>Use Git to sync our applications from Github onto the VPS.</li>
+<li>Create PostgreSQL databases for our applications and modify the <code>database.yml</code> file.</li>
+<li>Set up Nginx to serve our application.</li>
+</ul>
+
+
+<h2>Initial setup</h2>
+
+<p>First, we must create a <code>/var/www</code> folder. We can do that by <code>ssh</code>-ing into our VPS. We can create the folder using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkdir -p /var/www
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>mkdir</code> makes the directory and the <code>-p</code> flag adds intermediate folders if they don&rsquo;t exist.</p>
+
+<h2>GitHub setup</h2>
+
+<p>In order to avoid typing passwords all of the time, we must generate SSH keys and tie them to our Github account. You can follow this <a href="https://help.github.com/articles/generating-ssh-keys">guide</a> to get started.</p>
+
+<p>Next, lets fetch our Rails application using the <code>git clone</code> command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> /var/www
+</span><span class='line'>git clone git@github.com:NanoXD/fdpio.git
+</span><span class='line'>git clone git@github.com:NanoXD/testapp.git
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Verify that you have two folders within <code>/var/www/</code> for your two Rails apps.</p>
+
+<h2>Database Setup</h2>
+
+<p>We are going to create a seperate user for each application as it is good security practice to limit how much access a user has. Let&rsquo;s start off by logging into the PostgreSQL shell</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo -u postgres psql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can create users and databases for each of our applications using this syntax:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='psql'><span class='line'><span class="gp">postgres=#</span> <span class="k">create</span> <span class="k">user</span> <span class="n">REPLACE_WITH_USER</span> <span class="k">with</span> <span class="k">password</span> <span class="s1">&#39;ENTER_PASSWORD&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="gp">postgres=#</span> <span class="k">create</span> <span class="k">database</span> <span class="n">DATABASE_NAME</span> <span class="k">owner</span> <span class="n">USERNAME_FOR_DATABASE</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Configuring your database.yml</h3>
+
+<p>Each Rails application comes with a <code>database.yml</code> file like I described in <a href="http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac/">Setup PostgreSQL for Rails on a Mac</a>. Let&rsquo;s modify this file to connect to our new PostgreSQL database.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># /var/www/fdpio/config/database.yml</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgresql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">unicode</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">fdpio_db</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pool</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">fdpio</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">password-man</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Do the same for your secondary Rails app.</p>
+
+<h2>Configure Nginx</h2>
+
+<p>We now have to setup Nginx to allow us to serve our two applications using one server. If you followed <a href="2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">Part 1</a> of this tutorial, you can find your nginx.conf in the <code>/opt/</code>. Let&rsquo;s open it up using vim:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo vim /opt/nginx/conf/nginx.conf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Keep in mind that this configuration is suited to my two applications. Ensure that you chage the paths and names to fit your application. I will describe the changes below.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>worker_processes  1;
+</span><span class='line'>
+</span><span class='line'>events <span class="o">{</span>
+</span><span class='line'>    worker_connections  1024;
+</span><span class='line'>    multi_accept on;
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>http <span class="o">{</span>
+</span><span class='line'>    passenger_root /home/nano/.rvm/gems/ruby-2.0.0-p195/gems/passenger-4.0.5;
+</span><span class='line'>    passenger_ruby /home/nano/.rvm/wrappers/ruby-2.0.0-p195/ruby;
+</span><span class='line'>
+</span><span class='line'>    include       mime.types;
+</span><span class='line'>    default_type  application/octet-stream;
+</span><span class='line'>    sendfile        on;
+</span><span class='line'>    keepalive_timeout  65;
+</span><span class='line'>
+</span><span class='line'>    gzip  on;
+</span><span class='line'>    gzip_vary on;
+</span><span class='line'>
+</span><span class='line'>    server <span class="o">{</span>
+</span><span class='line'>        listen       80;
+</span><span class='line'>        server_name  fdp.io;
+</span><span class='line'>        charset utf-8;
+</span><span class='line'>        root /var/www/fdpio/public;
+</span><span class='line'>        passenger_enabled on;
+</span><span class='line'>        rails_env production;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    server <span class="o">{</span>
+</span><span class='line'>        listen       80;
+</span><span class='line'>        server_name  testapp.com;
+</span><span class='line'>        charset utf-8;
+</span><span class='line'>        root /var/www/testapp/public;
+</span><span class='line'>        passenger_enabled on;
+</span><span class='line'>        rails_env production;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The two Passenger settings that have to suit your machine are:<br/>
+<code>passenger_root</code> &ndash; Specifies where Passenger is<br/>
+<code>passenger_ruby</code> &ndash; Tells Passenger what version of Ruby to use.</p>
+
+<p>We created two server settings for each application. Here is what each setting means:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># What port does this server listen to?</span>
+</span><span class='line'>listen       80;
+</span><span class='line'>
+</span><span class='line'><span class="c"># Default charset to use.</span>
+</span><span class='line'>charset utf-8;
+</span><span class='line'>
+</span><span class='line'><span class="c"># What domain will I route to this application?</span>
+</span><span class='line'>server_name  fdp.io;
+</span><span class='line'>
+</span><span class='line'><span class="c"># The root of the application, for Rails apps it&#39;s always the public folder.</span>
+</span><span class='line'>root /var/www/fdpio/public;
+</span><span class='line'>
+</span><span class='line'><span class="c"># Let Passenger handle the Rails application.</span>
+</span><span class='line'>passenger_enabled on;
+</span><span class='line'>
+</span><span class='line'><span class="c"># Set the RAILS_ENV variable to &#39;production&#39;.</span>
+</span><span class='line'>rails_env production;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As long as these domains are in your possession and you have set up the DNS to point to your VPS, you can now visit the domains and see your application.</p>
+
+<p>The only caveat left is whenever you update your application, you will need to let Passenger know to reload the application. You can alleviate this in one of two ways:</p>
+
+<ol>
+<li>Create/Modify the <code>tmp/restart.txt</code> in your Rails application folder.</li>
+<li>Restart Nginx manually</li>
+</ol>
+
+
+<p>We are officially done with the manual work! We will be going over ways to automate this setup using tools like Capistrano and Chef in DevOps Part 3.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps for Ruby Part 1: VPS &amp; Ubuntu Installation]]></title>
+    <link href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/"/>
+    <updated>2013-06-23T21:53:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation</id>
+    <content type="html"><![CDATA[<p>When you first start learning <em>Ruby</em> or <em>Rails</em> you are expected to learn many different languages at a time. When it comes to deploying that application you hit a crossroad. Will you use a site like <a href="https://www.heroku.com/">Heroku</a> or try your luck at a VPS? For small applications, a cost-comparison will yield Heroku the prime candidate but once you need more dynos it quickly becomes cost-prohibitive. VPSs are an unyielding dragon that quickly breathe fire at a newcomer with it&rsquo;s extensibility. This guide aims to help in lowering the burden and making VPS more accessible to everyone.</p>
+
+<p><em>Notice: This guide is only meant as a starting point.</em></p>
+
+<h2>Picking a Virtual Private Server (VPS)</h2>
+
+<p>There are a plethora of VPS offerings out there. Some are inexpensive, use a different OS, include more ram, offer  more bandwidth. Look around and find one that fits you and your application needs best.</p>
+
+<p>The three VPS providers I hold dear to my heart are <a href="https://www.digitalocean.com/">DigitalOcean</a>, <a href="https://www.linode.com/">Linode</a>, and <a href="http://mediatemple.net/webhosting/vps/developer/index-3.php">MediaTemple DV</a>. DigitalOcean provides SSD cloud servers that can be built in minutes, Linode has quick and painless customization, and MediaTemple while being the most expensive, offers RAID-10. All three providers have excellent customer support and extensive documentation for any error you may encounter.</p>
+
+<p>Try to pick a server with at least:<br/>
+&ndash; 1GB RAM<br/>
+&ndash; 500GB Bandwidth<br/>
+&ndash; 20GB Storage</p>
+
+<h2>Ubuntu Setup and Configuration</h2>
+
+<p>I will cover Ubuntu 13.04 x64 as it is the latest version available on DigitalOcean and Linode.</p>
+
+<p>After selecting the operating system, you will be given a root password and IP to connect to your server. We will be using a terminal (e.g. Terminal or <a href="http://www.iterm2.com/">iTerm2</a>) to connect using the following command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>ssh 10.0.0.1
+</span><span class='line'>  root@10.0.0.1<span class="err">&#39;</span>s password: TYPE_PASSWORD_HERE
+</span><span class='line'>  Welcome to Ubuntu 13.04 <span class="o">(</span>GNU/Linux 3.8.0-19-generic x86_64<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Updates</h3>
+
+<p>The first thing we want to do is make sure our package manager has the latest updates and perform any upgrades.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># The first command pulls package lists while the second command runs the install script</span>
+</span><span class='line'><span class="nv">$ </span>sudo apt-get update
+</span><span class='line'><span class="nv">$ </span>sudo apt-get upgrade
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Security</h3>
+
+<p>Next we want to disable root access to the server. We do this by creating a new user using the <code>adduser</code> command. It will ask for a password (ideally different than the root password) and optional personal information.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>adduser sample
+</span><span class='line'>Adding user <span class="sb">`</span>sample<span class="s1">&#39; ...</span>
+</span><span class='line'><span class="s1">Adding new group `sample&#39;</span> <span class="o">(</span>1001<span class="o">)</span> ...
+</span><span class='line'>Adding new user <span class="sb">`</span>sample<span class="s1">&#39; (1001) with group `sample&#39;</span> ...
+</span><span class='line'>Creating home directory <span class="sb">`</span>/home/sample<span class="s1">&#39; ...</span>
+</span><span class='line'><span class="s1">Copying files from `/etc/skel&#39;</span> ...
+</span><span class='line'>Enter new UNIX password:
+</span><span class='line'>Retype new UNIX password:
+</span><span class='line'>passwd: password updated successfully
+</span><span class='line'>Changing the user information <span class="k">for </span>sample
+</span><span class='line'>Is the information correct? <span class="o">[</span>Y/n<span class="o">]</span> Y
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we want to allow our new user to have root capabilities by adding it to the sudo list:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo visudo
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>visudo</code> will bring up a document with lots of information. The only part you need to focus on is User privilege specification. We will add our new user to this section like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># User privilege specification</span>
+</span><span class='line'>root    <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
+</span><span class='line'>sample  <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Press <code>Ctrl + X</code> and enter <code>Y</code> to save the document. Next we will disable SSH login to the <code>root</code> login. <em>Note: We will be logging into our newly created account soon!</em></p>
+
+<p>Let&rsquo;s open up the SSH configuration file and find <code>PermitRootLogin</code> under the <code>Authentication</code> tab and change it to look like below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>vim /etc/ssh/sshd_config
+</span><span class='line'><span class="c"># You can also use nano if you don&#39;t like vim</span>
+</span><span class='line'><span class="nv">$ </span>nano /etc/ssh/sshd_config
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Authentication:</span>
+</span><span class='line'>LoginGraceTime 120
+</span><span class='line'>PermitRootLogin no
+</span><span class='line'>StrictModes yes
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For the changes to take effect you need to run</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>/etc/init.d/ssh restart
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, let&rsquo;s logout from the <code>root</code> account using the <code>logout</code> command.</p>
+
+<p>Now that we are logged out, lets use our new user <code>sample</code> using the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>ssh sample@ip-address
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Software Installation</h2>
+
+<p>Let&rsquo;s install some basic software before we install <em>rvm</em>. We need <code>curl</code> to download the script for rvm and <code>git</code> for version control.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo apt-get install curl git-core
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>RVM Installation</h3>
+
+<p>Next, let&rsquo;s install <a href="http://rvm.io/">RVM</a>. RVM stands for Ruby Version Manager and as it&rsquo;s name implies, it manages different versions of Ruby. There are a few alternatives such as <a href="http://rbenv.org/">rbenv</a> and <a href="https://github.com/postmodern/chruby">chruby</a>. You are welcome to pick whichever one you like but the following instructions are for RVM.</p>
+
+<p>First, let&rsquo;s grab RVM:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>curl -L get.rvm.io | bash -s stable
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After it is done installing, we will need to load it into our environment.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">source</span> ~/.rvm/scripts/rvm
+</span><span class='line'><span class="c"># We can verify the install using:</span>
+</span><span class='line'><span class="nv">$ </span>rvm -v
+</span><span class='line'><span class="c">#=&gt; rvm 1.21.2 (stable) by Wayne E. Seguin &lt;wayneeseguin@gmail.com&gt;, Michal Papis &lt;mpapis@gmail.com&gt; [https://rvm.io/]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In order to work, RVM has some of its own dependancies that need to be installed. You can install and see what they are using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rvm requirements
+</span><span class='line'><span class="c">#=&gt; Installing required packages: gawk, g++, gcc, make, libc6-dev, libreadline6-dev, zlib1g-dev, libssl-dev, libyaml-dev, libsqlite3-dev, sqlite3, libxml2-dev, libxslt1-dev, autoconf, libc6-dev, libgdbm-dev, libncurses5-dev, automake, libtool, bison, pkg-config, libffi-dev</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Ruby Installation</h3>
+
+<p>Now that RVM is installed we can install the latest patch level of Ruby 2 using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rvm install 2.0.0
+</span><span class='line'><span class="c"># To install 1.9.3</span>
+</span><span class='line'><span class="nv">$ </span>rvm install 1.9.3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once the version of Ruby you selected is finished installing, we can make it the <em>default</em> Ruby version.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rvm --default use 2.0.0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Rails Installation</h3>
+
+<p><em>Feel free to skip this section if you are using <a href="http://www.sinatrarb.com/">Sinatra</a>.</em></p>
+
+<p>Installing Rails is very simple, the only hard part is deciding what version you want to use.</p>
+
+<h4>Rails 3.2</h4>
+
+<p>Great! You picked the battle-tested Rails 3.2, which means less typing!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>gem install rails --version 3.2.13
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To verify the version installed run <code>rails -v</code></p>
+
+<h4>Rails 4</h4>
+
+<p><strong>Update: Rails 4 was released today on June 25th, 2013</strong>
+So you want to see what the hype is about? What are Turbolinks and Strong Parameters? Maybe you like to play with the Russian Doll Caching. Whatever it is, we can install it using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>gem install rails
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s run <code>rails -v</code> to verify our version number matches 4.0.0 RC2.</p>
+
+<h3>PostgreSQL</h3>
+
+<p>PostgreSQL is a highly regarded database in the Rails community as an object-relational database management system. To install it on Ubuntu run the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo apt-get install postgresql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For security purposes, we will change the <code>postgres</code> user password using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo -u postgres psql postgres
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The command will drop us into a psql session. Enter the following to change the default password:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="err">\</span><span class="n">password</span> <span class="n">postgres</span>
+</span><span class='line'><span class="o">#</span> <span class="n">Enter</span> <span class="k">new</span> <span class="n">password</span><span class="p">:</span>
+</span><span class='line'><span class="o">#</span> <span class="n">Enter</span> <span class="n">it</span> <span class="n">again</span><span class="p">:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you are finished, press <code>Ctrl + D</code> to terminate the psql session. Next we need to allow communication to the Postgres server from our Rails app. Let&rsquo;s open up the default configuration:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="err">$</span> <span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="mi">9</span><span class="p">.</span><span class="mi">1</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">postgresql</span><span class="p">.</span><span class="n">conf</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We are looking for a block that is commented out that allows localhost connections. Uncomment the line like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">- #listen_addresses = &#39;localhost&#39;</span>
+</span><span class='line'><span class="gi">+ listen_addresses = &#39;localhost&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All we need now is a Postgres server reboot:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>$ sudo service postgresql restart
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Passenger + Nginx Installation</h3>
+
+<p>My favorite app-server + web-server are Passenger and Nginx due to the ease of installation. First we will install the Passenger gem and setup the Nginx module.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>$ gem install passenger
+</span><span class='line'>$ rvmsudo passenger-install-nginx-module
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will be presented with three choices. Choose Option 1 to automate the installation of Nginx. You might have some missing package dependencies, follow the installation instructions for them and rerun <code>rvmsudo passenger-install-nginx-module</code></p>
+
+<p>Nginx is now installed and configured on your machine but it is recommended to install the following script to start, stop, or restart nginx.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>wget -O init-deb.sh http://library.linode.com/assets/660-init-deb.sh
+</span><span class='line'>mv init-deb.sh /etc/init.d/nginx
+</span><span class='line'>chmod +x /etc/init.d/nginx
+</span><span class='line'>/usr/sbin/update-rc.d -f nginx defaults
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The following commands will allow you to easily start or stop Nginx:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>sudo /etc/init.d/nginx stop
+</span><span class='line'>sudo /etc/init.d/nginx start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Congratulations, you are done with the first part of your VPS deployment. If you visit the ip address of your VPS, you will be greeted with the standard &ldquo;Welcome to nginx!&rdquo; page.</p>
+
+<p>Check back for Part two next week!</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="https://help.ubuntu.com/community/PostgreSQL">Ubuntu PostgreSQL</a></li>
+<li><a href="https://library.linode.com/web-servers/nginx/installation/ubuntu-10.04-lucid">Nginx Init Script</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setup PostgreSQL for Rails on a Mac]]></title>
+    <link href="http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac/"/>
+    <updated>2013-05-23T14:57:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac</id>
+    <content type="html"><![CDATA[<h2>Pick your elephant poison</h2>
+
+<p>There are a myriad of ways to install PostgreSQL on a Mac. I will be going over <code>brew</code> and <strong>Postgres.app</strong>. I like to go with the app as it eases into my workflow but does require it&rsquo;s path to be set in your profile (e.g <code>.zshrc</code>, <code>.bashrc</code>, or <code>fish.config</code>)</p>
+
+<h3>Homebrew Installation</h3>
+
+<p>The homebrew installation is very straightforward and can be done by following the guide below.</p>
+
+<ul>
+<li>Run a brew command to install PG and take note of the documentation that follows it.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install postgresql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>If this is your first install run the following command to create your first database</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>initdb /usr/local/var/postgres -E utf8
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Create aliases to simplify the start and stop of the Postgres service</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span>pg-start<span class="o">=</span><span class="s1">&#39;pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start&#39;</span>
+</span><span class='line'><span class="nb">alias </span>pg-stop<span class="o">=</span><span class="s1">&#39;pg_ctl -D /usr/local/var/postgres stop -s -m fast&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Postgres.app Installation</h3>
+
+<ol>
+<li>Visit <a href="http://postgresapp.com">http://postgresapp.com</a></li>
+<li>Download the latest version which as of this writing is <code>9.2.4.1</code></li>
+<li>Drag, drop, and open the elephant icon into the Application folder.</li>
+<li>Set the follwing in your <code>.bashrc</code> or<code>.zshrc</code></li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/Applications/Postgres.app/Contents/MacOS/bin:$PATH&quot;</span>
+</span><span class='line'><span class="c"># If you are using Fish, use the following:</span>
+</span><span class='line'><span class="nb">set </span>PATH /Applications/Postgres.app/Contents/MacOS/bin <span class="nv">$PATH</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Open the elephant and verify it is referencing the app using <code>which psql</code></li>
+</ol>
+
+
+<p>The path should look like what was entered above but if all else fails restart your terminal session.</p>
+
+<h2>Use Postgres in Rails</h2>
+
+<p>Now that you&rsquo;ve successfully installed PG, you can utilize it in rails by including it in your gemfile.</p>
+
+<h3>New Rails App</h3>
+
+<p>If you have yet to generate your rails app, you can set Postgresql as your database by running <code>rails new blog -d postgresql</code>
+You will then have to run <code>rake db:create:all</code> to create the databases in the <code>database.yml</code> file.</p>
+
+<h3>Existing Rails App</h3>
+
+<p>For an existing rails app you will need to add the <code>pg</code> gem to your gemfile like so.</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s1">&#39;https://rubygems.org&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;4.0.0.rc1&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s2">&quot;pg&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 0.15.1&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 4.0.0.rc1&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;uglifier&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;= 1.3.0&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;coffee-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 4.0.0&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;jquery-rails&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;turbolinks&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will also need to change your database.yml file to look something like this:</p>
+
+<figure class='code'><figcaption><span>database.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgresql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog_dev</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+</span><span class='line'><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgresql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog_test</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgresql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog_production</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">supersecretserver</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, you can run <code>rake db:create:all</code> followed by <code>rake db:migrate</code> and continue editing your amazing rails app!</p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscasts Ep. 342</a></li>
+<li><a href="http://postgresapp.com/">Postgres.app</a></li>
+<li><a href="http://rubygems.org/gems/pg">PG Gem</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Venture into tmux]]></title>
+    <link href="http://blog.nanoxd.net/2013/05/06/venture-into-tmux/"/>
+    <updated>2013-05-06T09:00:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/05/06/venture-into-tmux</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve recently gotten into tmux after experimenting with <code>vim</code> as my main editor. I initially had a frustrating experience until I changed the keybindings and used it to have my editor, <code>guard</code>, and <code>rails server</code> running on a single screen.</p>
+
+<h2>Definition</h2>
+
+<p><a href="http://tmux.sourceforge.net/"><strong>tmux</strong></a> is defined as a Terminal multiplexer that allows you to switch easily between several programs in one terminal, detach them (they keep running in the background) and reattach them to a different terminal. And do a lot more.</p>
+
+<h2>Installation</h2>
+
+<p>On a Mac you can use <a href="http://mxcl.github.io/homebrew/">Homebrew</a> to install the latest version using the following command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install tmux
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next we want to verify that it was installed properly. We can start up tmux and name the session using the <code>tmux new -s</code> command</p>
+
+<h2>Customize tmux.conf</h2>
+
+<p>I like to customize my tmux configuration to change some of the default tasks and add <a href="https://github.com/Lokaltog/powerline">Powerline</a> to the display bar.</p>
+
+<figure class='code'><figcaption><span>tmux.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">##### Basic Usage #####</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># First things first:  Remap the prefix key</span>
+</span><span class='line'>unbind C-b
+</span><span class='line'>
+</span><span class='line'><span class="c"># By default, we&#39;ll use Control-A as the prefix key.</span>
+</span><span class='line'><span class="nb">set</span> -g prefix <span class="s1">&#39;C-a&#39;</span> ; <span class="nb">bind</span> <span class="s1">&#39;C-a&#39;</span> send-prefix
+</span><span class='line'>
+</span><span class='line'><span class="c"># Reload tmux config so we can pick up changes to this file without needing to restart tmux</span>
+</span><span class='line'><span class="nb">bind </span>r <span class="nb">source</span>-file ~/.tmux.conf <span class="se">\;</span> display <span class="s2">&quot;Reloaded tmux configuration!&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Index windows from 1, not 0, so they line up a little better</span>
+</span><span class='line'><span class="c"># with the order of the number keys on the keyboard</span>
+</span><span class='line'><span class="nb">set</span> -g base-index 1
+</span><span class='line'>setw -g pane-base-index 1
+</span><span class='line'>
+</span><span class='line'><span class="c"># Patch for OS X pbpaste and pbcopy under tmux.</span>
+</span><span class='line'><span class="nb">set</span>-option -g default-command <span class="s2">&quot;reattach-to-user-namespace -l zsh&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">##### Scrollback Navigation #####</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Use vi-style navigation in Copy mode (which is also scrollback mode)</span>
+</span><span class='line'>setw -g mode-keys vi
+</span><span class='line'>
+</span><span class='line'><span class="c"># No escape time for vi mode</span>
+</span><span class='line'><span class="nb">set</span> -sg escape-time 0
+</span><span class='line'>
+</span><span class='line'><span class="c"># Allow proper copy/paste</span>
+</span><span class='line'><span class="nb">set</span>-option -g default-command <span class="s2">&quot;reattach-to-user-namespace -l $SHELL -l&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">##### Window/Pane Management #####</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Split windows more intuitively</span>
+</span><span class='line'><span class="nb">bind</span> | split-window -h <span class="c"># horizontal columns</span>
+</span><span class='line'><span class="nb">bind</span> - split-window -v <span class="c"># vertical rows</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Navigate panes vim-style!</span>
+</span><span class='line'><span class="nb">bind </span>h <span class="k">select</span>-pane -L
+</span><span class='line'><span class="nb">bind </span>j <span class="k">select</span>-pane -D
+</span><span class='line'><span class="nb">bind </span>k <span class="k">select</span>-pane -U
+</span><span class='line'><span class="nb">bind </span>l <span class="k">select</span>-pane -R
+</span><span class='line'>
+</span><span class='line'><span class="c"># And windows too!</span>
+</span><span class='line'><span class="nb">bind</span> -r C-l <span class="k">select</span>-window -t :+
+</span><span class='line'><span class="nb">bind</span> -r C-h <span class="k">select</span>-window -t :-
+</span><span class='line'>
+</span><span class='line'><span class="c"># Quickly jump between two windows</span>
+</span><span class='line'><span class="nb">bind </span>i last-window
+</span><span class='line'>
+</span><span class='line'><span class="c"># Resizing panes</span>
+</span><span class='line'><span class="nb">bind</span> -r H resize-pane -L 5
+</span><span class='line'><span class="nb">bind</span> -r J resize-pane -D 5
+</span><span class='line'><span class="nb">bind</span> -r K resize-pane -U 5
+</span><span class='line'><span class="nb">bind</span> -r L resize-pane -R 5
+</span><span class='line'>
+</span><span class='line'><span class="c">##### Colors || Visual #####</span>
+</span><span class='line'><span class="c"># Ensure we&#39;re using 256 colors</span>
+</span><span class='line'><span class="nb">set</span> -g default-terminal <span class="s2">&quot;screen-256color&quot;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c"># color scheme (styled as vim-powerline)</span>
+</span><span class='line'><span class="nb">set</span> -g status on
+</span><span class='line'><span class="nb">set</span> -g status-utf8 on
+</span><span class='line'><span class="nb">set</span> -g status-interval 2
+</span><span class='line'><span class="nb">set</span> -g status-fg colour231
+</span><span class='line'><span class="nb">set</span> -g status-bg colour234
+</span><span class='line'><span class="nb">set</span> -g status-left-length 20
+</span><span class='line'><span class="nb">set</span> -g status-left <span class="s1">&#39;#[fg=colour16,bg=colour254,bold] #S #[fg=colour254,bg=colour234,nobold]#(/usr/local/share/python/powerline tmux left)&#39;</span>
+</span><span class='line'><span class="nb">set</span> -g status-right <span class="s1">&#39;#(/usr/local/share/python/powerline tmux right)&#39;</span>
+</span><span class='line'><span class="nb">set</span> -g status-right-length 150
+</span><span class='line'><span class="nb">set</span> -g window-status-format <span class="s2">&quot;#[fg=colour244,bg=colour234]#I #[fg=colour240] #[fg=colour249]#W &quot;</span>
+</span><span class='line'><span class="nb">set</span> -g window-status-current-format <span class="s2">&quot;#[fg=colour234,bg=colour31]#[fg=colour117,bg=colour31] #I  #[fg=colour231,bold]#W #[fg=colour31,bg=colour234,nobold]&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Ring the bell if any background window rang a bell</span>
+</span><span class='line'><span class="nb">set</span> -g bell-action any
+</span><span class='line'>
+</span><span class='line'><span class="c"># Bigger history</span>
+</span><span class='line'><span class="nb">set</span> -g <span class="nb">history</span>-limit 10000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h2>Useful commands</h2>
+
+<p>Zoom into a single pane: <code>Prefix + Z</code><br/>
+Split the window into two vertical panes: <code>tmux split-window</code> or <code>Prefix + -</code><br/>
+Split the window into two horizontal panes: <code>tmux split-window -h</code> or <code>Prefix + |</code><br/>
+Create a new window: <code>tmux new-window</code> or <code>Prefix + c</code><br/>
+Select a window: <code>tmux select-window -t :0-9</code> or <code>Prefix + 0-9</code>
+Rename the current window: <code>tmux rename-window</code> or <code>Prefix + ,</code>
+Split the window into two vertical panes: <code>Prefix + |</code>
+Split the window into two horizontal panes: <code>Prefix + -</code></p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://robots.thoughtbot.com/post/2641409235/a-tmux-crash-course">thoughtbot</a></li>
+<li><a href="http://blog.hawkhost.com/2010/06/28/tmux-the-terminal-multiplexer/">Hawk Host Blog</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ammending git commits]]></title>
+    <link href="http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands/"/>
+    <updated>2013-04-12T08:11:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands</id>
+    <content type="html"><![CDATA[<p>During the past few years of using git, I&rsquo;ve come across several commands which have become pivotal in my workflow. One of them is <code>git commit --amend</code>.</p>
+
+<h2>Amending a commit</h2>
+
+<p>How many times have you inadvertantly forgotten to include a file in your last commit? I know my <a href="http://github.com">Github</a> can attest to my forgetfullness. We will first start out by creating a file named <code>help.md</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#Help
+</span><span class='line'>Nothing can stop the man with the right mental attitude from achieving his goal; nothing on
+</span><span class='line'>earth can help the man with the wrong mental attitude.</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add help.md
+</span><span class='line'>git commit -m <span class="s2">&quot;Add help file&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It seems we forgot to include some text in the help file. To fix it we will append the information to the end of the file using the <code>echo</code> command.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s1">&#39;You can also contact me at foo@bar.com&#39;</span> &gt;&gt; hello.md
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can now add it back to the list of tracked files and amend your commit using the following</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add help.md
+</span><span class='line'>git commit --amend -m <span class="s2">&quot;Add contact information to help file&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Congratulations, you have successfully amended a commit!</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://git-scm.com/book/en/Git-Basics-Undoing-Things">Git-SCM</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

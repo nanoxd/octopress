@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: VPS | NanoXD's Random Ramblings]]></title>
+  <link href="http://blog.nanoxd.net/blog/categories/vps/atom.xml" rel="self"/>
+  <link href="http://blog.nanoxd.net/"/>
+  <updated>2013-08-25T07:56:11-07:00</updated>
+  <id>http://blog.nanoxd.net/</id>
+  <author>
+    <name><![CDATA[Fernando Paredes]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps for Ruby Part 2: Using Nginx to Host Rails Applications]]></title>
+    <link href="http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/"/>
+    <updated>2013-07-06T19:26:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications</id>
+    <content type="html"><![CDATA[<p>In <a href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
+
+<h2>Objectives</h2>
+
+<p>The goal of this tutorial is to:</p>
+
+<ul>
+<li>Create the necessary folders to host our web applications</li>
+<li>Use Git to sync our applications from Github onto the VPS.</li>
+<li>Create PostgreSQL databases for our applications and modify the <code>database.yml</code> file.</li>
+<li>Set up Nginx to serve our application.</li>
+</ul>
+
+
+<h2>Initial setup</h2>
+
+<p>First, we must create a <code>/var/www</code> folder. We can do that by <code>ssh</code>-ing into our VPS. We can create the folder using:
+<code>bash
+sudo mkdir -p /var/www
+</code>
+<code>mkdir</code> makes the directory and the <code>-p</code> flag adds intermediate folders if they don&rsquo;t exist.</p>
+
+<h2>GitHub setup</h2>
+
+<p>In order to avoid typing passwords all of the time, we must generate SSH keys and tie them to our Github account. You can follow this <a href="https://help.github.com/articles/generating-ssh-keys">guide</a> to get started.</p>
+
+<p>Next, lets fetch our Rails application using the <code>git clone</code> command:
+<code>bash
+cd /var/www
+git clone git@github.com:NanoXD/fdpio.git
+git clone git@github.com:NanoXD/testapp.git
+</code></p>
+
+<p>Verify that you have two folders within <code>/var/www/</code> for your two Rails apps.</p>
+
+<h2>Database Setup</h2>
+
+<p>We are going to create a seperate user for each application as it is good security practice to limit how much access a user has. Let&rsquo;s start off by logging into the PostgreSQL shell</p>
+
+<p><code>bash
+sudo -u postgres psql
+</code></p>
+
+<p>We can create users and databases for each of our applications using this syntax:</p>
+
+<p><code>psql
+postgres=# create user REPLACE_WITH_USER with password 'ENTER_PASSWORD';
+postgres=# create database DATABASE_NAME owner USERNAME_FOR_DATABASE;
+</code></p>
+
+<h3>Configuring your database.yml</h3>
+
+<p>Each Rails application comes with a <code>database.yml</code> file like I described in <a href="/2013/05/23/setup-postgresql-for-rails-on-a-mac/">Setup PostgreSQL for Rails on a Mac</a>. Let&rsquo;s modify this file to connect to our new PostgreSQL database.</p>
+
+<p>```yml</p>
+
+<h1>/var/www/fdpio/config/database.yml</h1>
+
+<p>production:
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  database: fdpio_db
+  pool: 5
+  username: fdpio
+  password: password-man
+```</p>
+
+<p>Do the same for your secondary Rails app.</p>
+
+<h2>Configure Nginx</h2>
+
+<p>We now have to setup Nginx to allow us to serve our two applications using one server. If you followed <a href="2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">Part 1</a> of this tutorial, you can find your nginx.conf in the <code>/opt/</code>. Let&rsquo;s open it up using vim:</p>
+
+<p><code>bash
+sudo vim /opt/nginx/conf/nginx.conf
+</code></p>
+
+<p>Keep in mind that this configuration is suited to my two applications. Ensure that you chage the paths and names to fit your application. I will describe the changes below.</p>
+
+<p>```
+worker_processes  1;</p>
+
+<p>events {</p>
+
+<pre><code>worker_connections  1024;
+multi_accept on;
+</code></pre>
+
+<p>}</p>
+
+<p>http {</p>
+
+<pre><code>passenger_root /home/nano/.rvm/gems/ruby-2.0.0-p195/gems/passenger-4.0.5;
+passenger_ruby /home/nano/.rvm/wrappers/ruby-2.0.0-p195/ruby;
+
+include       mime.types;
+default_type  application/octet-stream;
+sendfile        on;
+keepalive_timeout  65;
+
+gzip  on;
+gzip_vary on;
+
+server {
+    listen       80;
+    server_name  fdp.io;
+    charset utf-8;
+    root /var/www/fdpio/public;
+    passenger_enabled on;
+    rails_env production;
+}
+
+server {
+    listen       80;
+    server_name  testapp.com;
+    charset utf-8;
+    root /var/www/testapp/public;
+    passenger_enabled on;
+    rails_env production;
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>The two Passenger settings that have to suit your machine are:<br/>
+<code>passenger_root</code> &ndash; Specifies where Passenger is<br/>
+<code>passenger_ruby</code> &ndash; Tells Passenger what version of Ruby to use.</p>
+
+<p>We created two server settings for each application. Here is what each setting means:</p>
+
+<p>```</p>
+
+<h1>What port does this server listen to?</h1>
+
+<p>listen       80;</p>
+
+<h1>Default charset to use.</h1>
+
+<p>charset utf-8;</p>
+
+<h1>What domain will I route to this application?</h1>
+
+<p>server_name  fdp.io;</p>
+
+<h1>The root of the application, for Rails apps it&rsquo;s always the public folder.</h1>
+
+<p>root /var/www/fdpio/public;</p>
+
+<h1>Let Passenger handle the Rails application.</h1>
+
+<p>passenger_enabled on;</p>
+
+<h1>Set the RAILS_ENV variable to &lsquo;production&rsquo;.</h1>
+
+<p>rails_env production;
+```</p>
+
+<p>As long as these domains are in your possession and you have set up the DNS to point to your VPS, you can now visit the domains and see your application.</p>
+
+<p>The only caveat left is whenever you update your application, you will need to let Passenger know to reload the application. You can alleviate this in one of two ways:</p>
+
+<ol>
+<li>Create/Modify the <code>tmp/restart.txt</code> in your Rails application folder.</li>
+<li>Restart Nginx manually</li>
+</ol>
+
+
+<p>We are officially done with the manual work! We will be going over ways to automate this setup using tools like Capistrano and Chef in DevOps Part 3.</p>
+]]></content>
+  </entry>
+  
+</feed>

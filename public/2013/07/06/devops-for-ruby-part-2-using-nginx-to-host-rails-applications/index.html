@@ -1,0 +1,531 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>DevOps for Ruby Part 2: Using Nginx to Host Rails Applications - NanoXD's Random Ramblings</title>
+  <meta name="author" content="Fernando Paredes">
+
+  
+  <meta name="description" content="DevOps for Ruby Part 2: Using Nginx to Host Rails Applications Jul 6th, 2013 In DevOps for Ruby Part 1, we set up a new VPS with all of the software &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications">
+  <link href="/favicon.ico" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="NanoXD's Random Ramblings" type="application/atom+xml">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap-collapse.js"></script>
+  <script src="/js/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/js/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-40019118-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div class="navbar navbar-inverse navbar-static-top">
+  	<div class="navbar-inner">
+  	  <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+          <span class="fui-menu-24"></span>
+        </a>
+  	  	<div class="nav-collapse collapse navbar-responsive-collapse" style="height:0;">
+  	      <ul class="nav">
+    
+        <li ><a href="/index.html">Home</a></li>
+    
+        <li ><a href="http://fdp.io">Resume</a></li>
+    
+        <li ><a href="mailto:nano@fdp.io">E-Mail</a></li>
+    
+</ul>
+
+<ul class="nav pull-right">
+    
+    <li><a href="http://github.com/nanoxd" title="Github Profile"><i class="icon-github-sign social-navbar"></i></a></li>
+    
+    
+    
+    <li><a href="http://twitter.com/nanoxd" title="Twitter Profile"><i class="icon-twitter-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://plus.google.com/114887184071469311816" title="Google+ Profile"><i class="icon-google-plus-sign social-navbar"></i></a></li>
+    
+    
+</ul>
+
+  	    </div>
+  	  </div>
+  	</div>
+  </div>
+  <div class="container" id="main">
+    <div class="span12">
+      <div class="row-fluid">
+        <div id="content">
+          <div>
+<article class="hentry" role="article">
+  
+
+  <header>
+  <div class="jumbotron">
+    DevOps for Ruby Part 2: Using Nginx to Host Rails Applications
+	<h5>
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2013-07-06T19:26:00-07:00" pubdate data-updated="true">Jul 6<span>th</span>, 2013</time></h5>
+  </div>
+</header>
+  <div class="row-fluid">
+    <div class="span12">
+      <p>In <a href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
+
+<h2>Objectives</h2>
+
+<p>The goal of this tutorial is to:</p>
+
+<ul>
+<li>Create the necessary folders to host our web applications</li>
+<li>Use Git to sync our applications from Github onto the VPS.</li>
+<li>Create PostgreSQL databases for our applications and modify the <code>database.yml</code> file.</li>
+<li>Set up Nginx to serve our application.</li>
+</ul>
+
+
+<h2>Initial setup</h2>
+
+<p>First, we must create a <code>/var/www</code> folder. We can do that by <code>ssh</code>-ing into our VPS. We can create the folder using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkdir -p /var/www
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>mkdir</code> makes the directory and the <code>-p</code> flag adds intermediate folders if they don&rsquo;t exist.</p>
+
+<h2>GitHub setup</h2>
+
+<p>In order to avoid typing passwords all of the time, we must generate SSH keys and tie them to our Github account. You can follow this <a href="https://help.github.com/articles/generating-ssh-keys">guide</a> to get started.</p>
+
+<p>Next, lets fetch our Rails application using the <code>git clone</code> command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> /var/www
+</span><span class='line'>git clone git@github.com:NanoXD/fdpio.git
+</span><span class='line'>git clone git@github.com:NanoXD/testapp.git
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Verify that you have two folders within <code>/var/www/</code> for your two Rails apps.</p>
+
+<h2>Database Setup</h2>
+
+<p>We are going to create a seperate user for each application as it is good security practice to limit how much access a user has. Let&rsquo;s start off by logging into the PostgreSQL shell</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo -u postgres psql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can create users and databases for each of our applications using this syntax:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='psql'><span class='line'><span class="gp">postgres=#</span> <span class="k">create</span> <span class="k">user</span> <span class="n">REPLACE_WITH_USER</span> <span class="k">with</span> <span class="k">password</span> <span class="s1">&#39;ENTER_PASSWORD&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="gp">postgres=#</span> <span class="k">create</span> <span class="k">database</span> <span class="n">DATABASE_NAME</span> <span class="k">owner</span> <span class="n">USERNAME_FOR_DATABASE</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Configuring your database.yml</h3>
+
+<p>Each Rails application comes with a <code>database.yml</code> file like I described in <a href="/2013/05/23/setup-postgresql-for-rails-on-a-mac/">Setup PostgreSQL for Rails on a Mac</a>. Let&rsquo;s modify this file to connect to our new PostgreSQL database.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># /var/www/fdpio/config/database.yml</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgresql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">unicode</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">fdpio_db</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pool</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">fdpio</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">password-man</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Do the same for your secondary Rails app.</p>
+
+<h2>Configure Nginx</h2>
+
+<p>We now have to setup Nginx to allow us to serve our two applications using one server. If you followed <a href="2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">Part 1</a> of this tutorial, you can find your nginx.conf in the <code>/opt/</code>. Let&rsquo;s open it up using vim:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo vim /opt/nginx/conf/nginx.conf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Keep in mind that this configuration is suited to my two applications. Ensure that you chage the paths and names to fit your application. I will describe the changes below.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>worker_processes  1;
+</span><span class='line'>
+</span><span class='line'>events <span class="o">{</span>
+</span><span class='line'>    worker_connections  1024;
+</span><span class='line'>    multi_accept on;
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>http <span class="o">{</span>
+</span><span class='line'>    passenger_root /home/nano/.rvm/gems/ruby-2.0.0-p195/gems/passenger-4.0.5;
+</span><span class='line'>    passenger_ruby /home/nano/.rvm/wrappers/ruby-2.0.0-p195/ruby;
+</span><span class='line'>
+</span><span class='line'>    include       mime.types;
+</span><span class='line'>    default_type  application/octet-stream;
+</span><span class='line'>    sendfile        on;
+</span><span class='line'>    keepalive_timeout  65;
+</span><span class='line'>
+</span><span class='line'>    gzip  on;
+</span><span class='line'>    gzip_vary on;
+</span><span class='line'>
+</span><span class='line'>    server <span class="o">{</span>
+</span><span class='line'>        listen       80;
+</span><span class='line'>        server_name  fdp.io;
+</span><span class='line'>        charset utf-8;
+</span><span class='line'>        root /var/www/fdpio/public;
+</span><span class='line'>        passenger_enabled on;
+</span><span class='line'>        rails_env production;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    server <span class="o">{</span>
+</span><span class='line'>        listen       80;
+</span><span class='line'>        server_name  testapp.com;
+</span><span class='line'>        charset utf-8;
+</span><span class='line'>        root /var/www/testapp/public;
+</span><span class='line'>        passenger_enabled on;
+</span><span class='line'>        rails_env production;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The two Passenger settings that have to suit your machine are:<br/>
+<code>passenger_root</code> &ndash; Specifies where Passenger is<br/>
+<code>passenger_ruby</code> &ndash; Tells Passenger what version of Ruby to use.</p>
+
+<p>We created two server settings for each application. Here is what each setting means:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># What port does this server listen to?</span>
+</span><span class='line'>listen       80;
+</span><span class='line'>
+</span><span class='line'><span class="c"># Default charset to use.</span>
+</span><span class='line'>charset utf-8;
+</span><span class='line'>
+</span><span class='line'><span class="c"># What domain will I route to this application?</span>
+</span><span class='line'>server_name  fdp.io;
+</span><span class='line'>
+</span><span class='line'><span class="c"># The root of the application, for Rails apps it&#39;s always the public folder.</span>
+</span><span class='line'>root /var/www/fdpio/public;
+</span><span class='line'>
+</span><span class='line'><span class="c"># Let Passenger handle the Rails application.</span>
+</span><span class='line'>passenger_enabled on;
+</span><span class='line'>
+</span><span class='line'><span class="c"># Set the RAILS_ENV variable to &#39;production&#39;.</span>
+</span><span class='line'>rails_env production;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As long as these domains are in your possession and you have set up the DNS to point to your VPS, you can now visit the domains and see your application.</p>
+
+<p>The only caveat left is whenever you update your application, you will need to let Passenger know to reload the application. You can alleviate this in one of two ways:</p>
+
+<ol>
+<li>Create/Modify the <code>tmp/restart.txt</code> in your Rails application folder.</li>
+<li>Restart Nginx manually</li>
+</ol>
+
+
+<p>We are officially done with the manual work! We will be going over ways to automate this setup using tools like Capistrano and Chef in DevOps Part 3.</p>
+
+    </div>
+  </div>
+
+
+
+  <footer>
+    <hr>
+    
+    <div class="row-fluid">
+      
+      <div class="span6">
+        <p class="meta">
+        
+        
+
+
+
+  <a href="/blog/categories/DevOps/"><span class="badge">DevOps</span></a>
+
+  <a href="/blog/categories/Nginx/"><span class="badge">Nginx</span></a>
+
+  <a href="/blog/categories/PostgreSQL/"><span class="badge">PostgreSQL</span></a>
+
+  <a href="/blog/categories/Rails/"><span class="badge">Rails</span></a>
+
+  <a href="/blog/categories/Ruby/"><span class="badge">Ruby</span></a>
+
+  <a href="/blog/categories/VPS/"><span class="badge">VPS</span></a>
+
+
+
+
+        </p>
+      </div>
+      
+      <div class="span6 social-sharing">
+        <div class="sharing">
+  <div class="addthis_toolbox addthis_default_style ">
+  
+  
+  <a class="addthis_button_tweet"></a>
+  
+  
+  <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+  
+  <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+      </div>
+      
+      
+    </div>
+    
+    <div class="row-fluid">
+      <div class="span12">
+        <p class="meta">
+          
+            <a class="basic-alignment left" href="/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/" title="Previous Post: DevOps for Ruby Part 1: VPS &amp; Ubuntu Installation">&laquo; DevOps for Ruby Part 1: VPS &amp; Ubuntu Installation</a>
+          
+          
+            <a class="basic-alignment right" href="/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/" title="Next Post: Make iTerm 2 work with Mac OSX movement keyboard shortcuts">Make iTerm 2 work with Mac OSX movement keyboard shortcuts &raquo;</a>
+          
+        </p>
+      </div>
+    </div>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+
+
+        </div>
+      </div>
+      <div class="row-fluid">
+        <footer class="footer-page" role="contentinfo">
+          <p>
+  Copyright &copy; 2013 - Fernando Paredes -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - Theme by <a href="http://alexgaribay.com">Alex Garibay</a>
+</p>
+
+
+        </footer>
+      </div>
+    </div>
+  </div>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'nanoxd';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/';
+        var disqus_url = 'http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script type="text/javascript">
+  var GoSquared = {};
+  GoSquared.load = function(theTracker){
+  if(/localhost/.test(location.hostname)) theTracker.Cancel();
+};
+  GoSquared.acct = "GSN-830135-N";
+  (function(w){
+    function gs(){
+      w._gstc_lt = +new Date;
+      var d = document, g = d.createElement("script");
+      g.type = "text/javascript";
+      g.src = "//d1l6p2sc9645hc.cloudfront.net/tracker.js";
+      var s = d.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(g, s);
+    }
+    w.addEventListener ?
+      w.addEventListener("load", gs, false) :
+      w.attachEvent("onload", gs);
+  })(window);
+</script>
+
+
+<script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '5169d833f5a1f57960000072');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/javascripts/aharris.js"></script>
+
+
+</body>
+</html>

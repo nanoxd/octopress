@@ -1,0 +1,756 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>NanoXD's Random Ramblings</title>
+  <meta name="author" content="Fernando Paredes">
+
+  
+  <meta name="description" content="NanoXD&#8217;s Random Ramblings May 23rd, 2013 Comments Rails SQL Setup postgres Setup PostgreSQL for Rails on a Mac Pick your elephant poison There &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.nanoxd.net/blog/page/2">
+  <link href="/favicon.ico" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="NanoXD's Random Ramblings" type="application/atom+xml">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap-collapse.js"></script>
+  <script src="/js/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/js/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-40019118-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div class="navbar navbar-inverse navbar-static-top">
+  	<div class="navbar-inner">
+  	  <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+          <span class="fui-menu-24"></span>
+        </a>
+  	  	<div class="nav-collapse collapse navbar-responsive-collapse" style="height:0;">
+  	      <ul class="nav">
+    
+        <li ><a href="/index.html">Home</a></li>
+    
+        <li ><a href="http://fdp.io">Resume</a></li>
+    
+        <li ><a href="mailto:nano@fdp.io">E-Mail</a></li>
+    
+</ul>
+
+<ul class="nav pull-right">
+    
+    <li><a href="http://github.com/nanoxd" title="Github Profile"><i class="icon-github-sign social-navbar"></i></a></li>
+    
+    
+    
+    <li><a href="http://twitter.com/nanoxd" title="Twitter Profile"><i class="icon-twitter-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://plus.google.com/114887184071469311816" title="Google+ Profile"><i class="icon-google-plus-sign social-navbar"></i></a></li>
+    
+    
+</ul>
+
+  	    </div>
+  	  </div>
+  	</div>
+  </div>
+  <div class="container" id="main">
+    <div class="span12">
+      <div class="row-fluid">
+        <div id="content">
+          <div class="jumbotron">
+  <div class="container">
+    NanoXD&#8217;s
+    <h3 class="tagline">Random Ramblings</h3>
+  </div>
+</div>
+
+
+<div class="blog-index">
+  
+  
+  
+    <article>
+      
+
+  <div class="row-fluid">
+    <div class="span2">
+		<h1 class="date-time">
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2013-05-23T14:57:00-07:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time></h5>
+          <div class="row-fluid">
+          
+          <a href="http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
+          
+          </div>
+          
+          <div class="row-fluid">
+          
+          <a href="/blog/categories/Rails/"><span class="badge">Rails</span></a>
+          
+          <a href="/blog/categories/SQL/"><span class="badge">SQL</span></a>
+          
+          <a href="/blog/categories/Setup/"><span class="badge">Setup</span></a>
+          
+          <a href="/blog/categories/postgres/"><span class="badge">postgres</span></a>
+          
+          </div>
+          
+    </div>
+    <div class="span10">
+      <h1 class="link"><a href="/2013/05/23/setup-postgresql-for-rails-on-a-mac/">Setup PostgreSQL for Rails on a Mac</a></h1>
+      <h2>Pick your elephant poison</h2>
+
+<p>There are a myriad of ways to install PostgreSQL on a Mac. I will be going over <code>brew</code> and <strong>Postgres.app</strong>. I like to go with the app as it eases into my workflow but does require it&rsquo;s path to be set in your profile (e.g <code>.zshrc</code>, <code>.bashrc</code>, or <code>fish.config</code>)</p>
+
+<h3>Homebrew Installation</h3>
+
+<p>The homebrew installation is very straightforward and can be done by following the guide below.</p>
+
+<ul>
+<li>Run a brew command to install PG and take note of the documentation that follows it.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install postgresql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>If this is your first install run the following command to create your first database</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>initdb /usr/local/var/postgres -E utf8
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Create aliases to simplify the start and stop of the Postgres service</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span>pg-start<span class="o">=</span><span class="s1">&#39;pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start&#39;</span>
+</span><span class='line'><span class="nb">alias </span>pg-stop<span class="o">=</span><span class="s1">&#39;pg_ctl -D /usr/local/var/postgres stop -s -m fast&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Postgres.app Installation</h3>
+
+<ol>
+<li>Visit <a href="http://postgresapp.com">http://postgresapp.com</a></li>
+<li>Download the latest version which as of this writing is <code>9.2.4.1</code></li>
+<li>Drag, drop, and open the elephant icon into the Application folder.</li>
+<li>Set the follwing in your <code>.bashrc</code> or<code>.zshrc</code></li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/Applications/Postgres.app/Contents/MacOS/bin:$PATH&quot;</span>
+</span><span class='line'><span class="c"># If you are using Fish, use the following:</span>
+</span><span class='line'><span class="nb">set </span>PATH /Applications/Postgres.app/Contents/MacOS/bin <span class="nv">$PATH</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Open the elephant and verify it is referencing the app using <code>which psql</code></li>
+</ol>
+
+
+<p>The path should look like what was entered above but if all else fails restart your terminal session.</p>
+
+<h2>Use Postgres in Rails</h2>
+
+<p>Now that you&rsquo;ve successfully installed PG, you can utilize it in rails by including it in your gemfile.</p>
+
+<h3>New Rails App</h3>
+
+<p>If you have yet to generate your rails app, you can set Postgresql as your database by running <code>rails new blog -d postgresql</code>
+You will then have to run <code>rake db:create:all</code> to create the databases in the <code>database.yml</code> file.</p>
+
+<h3>Existing Rails App</h3>
+
+<p>For an existing rails app you will need to add the <code>pg</code> gem to your gemfile like so.</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s1">&#39;https://rubygems.org&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;4.0.0.rc1&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s2">&quot;pg&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 0.15.1&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 4.0.0.rc1&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;uglifier&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;= 1.3.0&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;coffee-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 4.0.0&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;jquery-rails&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;turbolinks&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will also need to change your database.yml file to look something like this:</p>
+
+<figure class='code'><figcaption><span>database.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgresql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog_dev</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+</span><span class='line'><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgresql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog_test</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgresql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog_production</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">supersecretserver</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, you can run <code>rake db:create:all</code> followed by <code>rake db:migrate</code> and continue editing your amazing rails app!</p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscasts Ep. 342</a></li>
+<li><a href="http://postgresapp.com/">Postgres.app</a></li>
+<li><a href="http://rubygems.org/gems/pg">PG Gem</a></li>
+</ul>
+
+
+      
+      
+    </div>
+  </div>
+
+
+
+    </article>
+    
+    <hr>
+    
+  
+  
+    <article>
+      
+
+  <div class="row-fluid">
+    <div class="span2">
+		<h1 class="date-time">
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2013-05-06T09:00:00-07:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time></h5>
+          <div class="row-fluid">
+          
+          <a href="http://blog.nanoxd.net/2013/05/06/venture-into-tmux/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
+          
+          </div>
+          
+          <div class="row-fluid">
+          
+          <a href="/blog/categories/brew/"><span class="badge">brew</span></a>
+          
+          <a href="/blog/categories/cli/"><span class="badge">cli</span></a>
+          
+          <a href="/blog/categories/tmux/"><span class="badge">tmux</span></a>
+          
+          </div>
+          
+    </div>
+    <div class="span10">
+      <h1 class="link"><a href="/2013/05/06/venture-into-tmux/">Venture into tmux</a></h1>
+      <p>I&rsquo;ve recently gotten into tmux after experimenting with <code>vim</code> as my main editor. I initially had a frustrating experience until I changed the keybindings and used it to have my editor, <code>guard</code>, and <code>rails server</code> running on a single screen.</p>
+
+<h2>Definition</h2>
+
+<p><a href="http://tmux.sourceforge.net/"><strong>tmux</strong></a> is defined as a Terminal multiplexer that allows you to switch easily between several programs in one terminal, detach them (they keep running in the background) and reattach them to a different terminal. And do a lot more.</p>
+
+<h2>Installation</h2>
+
+<p>On a Mac you can use <a href="http://mxcl.github.io/homebrew/">Homebrew</a> to install the latest version using the following command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install tmux
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next we want to verify that it was installed properly. We can start up tmux and name the session using the <code>tmux new -s</code> command</p>
+
+<h2>Customize tmux.conf</h2>
+
+<p>I like to customize my tmux configuration to change some of the default tasks and add <a href="https://github.com/Lokaltog/powerline">Powerline</a> to the display bar.</p>
+
+<figure class='code'><figcaption><span>tmux.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">##### Basic Usage #####</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># First things first:  Remap the prefix key</span>
+</span><span class='line'>unbind C-b
+</span><span class='line'>
+</span><span class='line'><span class="c"># By default, we&#39;ll use Control-A as the prefix key.</span>
+</span><span class='line'><span class="nb">set</span> -g prefix <span class="s1">&#39;C-a&#39;</span> ; <span class="nb">bind</span> <span class="s1">&#39;C-a&#39;</span> send-prefix
+</span><span class='line'>
+</span><span class='line'><span class="c"># Reload tmux config so we can pick up changes to this file without needing to restart tmux</span>
+</span><span class='line'><span class="nb">bind </span>r <span class="nb">source</span>-file ~/.tmux.conf <span class="se">\;</span> display <span class="s2">&quot;Reloaded tmux configuration!&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Index windows from 1, not 0, so they line up a little better</span>
+</span><span class='line'><span class="c"># with the order of the number keys on the keyboard</span>
+</span><span class='line'><span class="nb">set</span> -g base-index 1
+</span><span class='line'>setw -g pane-base-index 1
+</span><span class='line'>
+</span><span class='line'><span class="c"># Patch for OS X pbpaste and pbcopy under tmux.</span>
+</span><span class='line'><span class="nb">set</span>-option -g default-command <span class="s2">&quot;reattach-to-user-namespace -l zsh&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">##### Scrollback Navigation #####</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Use vi-style navigation in Copy mode (which is also scrollback mode)</span>
+</span><span class='line'>setw -g mode-keys vi
+</span><span class='line'>
+</span><span class='line'><span class="c"># No escape time for vi mode</span>
+</span><span class='line'><span class="nb">set</span> -sg escape-time 0
+</span><span class='line'>
+</span><span class='line'><span class="c"># Allow proper copy/paste</span>
+</span><span class='line'><span class="nb">set</span>-option -g default-command <span class="s2">&quot;reattach-to-user-namespace -l $SHELL -l&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">##### Window/Pane Management #####</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Split windows more intuitively</span>
+</span><span class='line'><span class="nb">bind</span> | split-window -h <span class="c"># horizontal columns</span>
+</span><span class='line'><span class="nb">bind</span> - split-window -v <span class="c"># vertical rows</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Navigate panes vim-style!</span>
+</span><span class='line'><span class="nb">bind </span>h <span class="k">select</span>-pane -L
+</span><span class='line'><span class="nb">bind </span>j <span class="k">select</span>-pane -D
+</span><span class='line'><span class="nb">bind </span>k <span class="k">select</span>-pane -U
+</span><span class='line'><span class="nb">bind </span>l <span class="k">select</span>-pane -R
+</span><span class='line'>
+</span><span class='line'><span class="c"># And windows too!</span>
+</span><span class='line'><span class="nb">bind</span> -r C-l <span class="k">select</span>-window -t :+
+</span><span class='line'><span class="nb">bind</span> -r C-h <span class="k">select</span>-window -t :-
+</span><span class='line'>
+</span><span class='line'><span class="c"># Quickly jump between two windows</span>
+</span><span class='line'><span class="nb">bind </span>i last-window
+</span><span class='line'>
+</span><span class='line'><span class="c"># Resizing panes</span>
+</span><span class='line'><span class="nb">bind</span> -r H resize-pane -L 5
+</span><span class='line'><span class="nb">bind</span> -r J resize-pane -D 5
+</span><span class='line'><span class="nb">bind</span> -r K resize-pane -U 5
+</span><span class='line'><span class="nb">bind</span> -r L resize-pane -R 5
+</span><span class='line'>
+</span><span class='line'><span class="c">##### Colors || Visual #####</span>
+</span><span class='line'><span class="c"># Ensure we&#39;re using 256 colors</span>
+</span><span class='line'><span class="nb">set</span> -g default-terminal <span class="s2">&quot;screen-256color&quot;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c"># color scheme (styled as vim-powerline)</span>
+</span><span class='line'><span class="nb">set</span> -g status on
+</span><span class='line'><span class="nb">set</span> -g status-utf8 on
+</span><span class='line'><span class="nb">set</span> -g status-interval 2
+</span><span class='line'><span class="nb">set</span> -g status-fg colour231
+</span><span class='line'><span class="nb">set</span> -g status-bg colour234
+</span><span class='line'><span class="nb">set</span> -g status-left-length 20
+</span><span class='line'><span class="nb">set</span> -g status-left <span class="s1">&#39;#[fg=colour16,bg=colour254,bold] #S #[fg=colour254,bg=colour234,nobold]#(/usr/local/share/python/powerline tmux left)&#39;</span>
+</span><span class='line'><span class="nb">set</span> -g status-right <span class="s1">&#39;#(/usr/local/share/python/powerline tmux right)&#39;</span>
+</span><span class='line'><span class="nb">set</span> -g status-right-length 150
+</span><span class='line'><span class="nb">set</span> -g window-status-format <span class="s2">&quot;#[fg=colour244,bg=colour234]#I #[fg=colour240] #[fg=colour249]#W &quot;</span>
+</span><span class='line'><span class="nb">set</span> -g window-status-current-format <span class="s2">&quot;#[fg=colour234,bg=colour31]#[fg=colour117,bg=colour31] #I  #[fg=colour231,bold]#W #[fg=colour31,bg=colour234,nobold]&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Ring the bell if any background window rang a bell</span>
+</span><span class='line'><span class="nb">set</span> -g bell-action any
+</span><span class='line'>
+</span><span class='line'><span class="c"># Bigger history</span>
+</span><span class='line'><span class="nb">set</span> -g <span class="nb">history</span>-limit 10000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h2>Useful commands</h2>
+
+<p>Zoom into a single pane: <code>Prefix + Z</code><br/>
+Split the window into two vertical panes: <code>tmux split-window</code> or <code>Prefix + -</code><br/>
+Split the window into two horizontal panes: <code>tmux split-window -h</code> or <code>Prefix + |</code><br/>
+Create a new window: <code>tmux new-window</code> or <code>Prefix + c</code><br/>
+Select a window: <code>tmux select-window -t :0-9</code> or <code>Prefix + 0-9</code>
+Rename the current window: <code>tmux rename-window</code> or <code>Prefix + ,</code>
+Split the window into two vertical panes: <code>Prefix + |</code>
+Split the window into two horizontal panes: <code>Prefix + -</code></p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://robots.thoughtbot.com/post/2641409235/a-tmux-crash-course">thoughtbot</a></li>
+<li><a href="http://blog.hawkhost.com/2010/06/28/tmux-the-terminal-multiplexer/">Hawk Host Blog</a></li>
+</ul>
+
+
+      
+      
+    </div>
+  </div>
+
+
+
+    </article>
+    
+    <hr>
+    
+  
+  
+    <article>
+      
+
+  <div class="row-fluid">
+    <div class="span2">
+		<h1 class="date-time">
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2013-04-12T08:11:00-07:00" pubdate data-updated="true">Apr 12<span>th</span>, 2013</time></h5>
+          <div class="row-fluid">
+          
+          <a href="http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
+          
+          </div>
+          
+          <div class="row-fluid">
+          
+          <a href="/blog/categories/git/"><span class="badge">git</span></a>
+          
+          </div>
+          
+    </div>
+    <div class="span10">
+      <h1 class="link"><a href="/2013/04/12/extremely-useful-git-commands/">Ammending git commits</a></h1>
+      <p>During the past few years of using git, I&rsquo;ve come across several commands which have become pivotal in my workflow. One of them is <code>git commit --amend</code>.</p>
+
+<h2>Amending a commit</h2>
+
+<p>How many times have you inadvertantly forgotten to include a file in your last commit? I know my <a href="http://github.com">Github</a> can attest to my forgetfullness. We will first start out by creating a file named <code>help.md</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#Help
+</span><span class='line'>Nothing can stop the man with the right mental attitude from achieving his goal; nothing on
+</span><span class='line'>earth can help the man with the wrong mental attitude.</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add help.md
+</span><span class='line'>git commit -m <span class="s2">&quot;Add help file&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It seems we forgot to include some text in the help file. To fix it we will append the information to the end of the file using the <code>echo</code> command.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s1">&#39;You can also contact me at foo@bar.com&#39;</span> &gt;&gt; hello.md
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can now add it back to the list of tracked files and amend your commit using the following</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add help.md
+</span><span class='line'>git commit --amend -m <span class="s2">&quot;Add contact information to help file&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Congratulations, you have successfully amended a commit!</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://git-scm.com/book/en/Git-Basics-Undoing-Things">Git-SCM</a></li>
+</ul>
+
+
+      
+      
+    </div>
+  </div>
+
+
+
+    </article>
+    
+  
+  <div class="pagination">
+    
+
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+
+
+        </div>
+      </div>
+      <div class="row-fluid">
+        <footer class="footer-page" role="contentinfo">
+          <p>
+  Copyright &copy; 2013 - Fernando Paredes -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - Theme by <a href="http://alexgaribay.com">Alex Garibay</a>
+</p>
+
+
+        </footer>
+      </div>
+    </div>
+  </div>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'nanoxd';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script type="text/javascript">
+  var GoSquared = {};
+  GoSquared.load = function(theTracker){
+  if(/localhost/.test(location.hostname)) theTracker.Cancel();
+};
+  GoSquared.acct = "GSN-830135-N";
+  (function(w){
+    function gs(){
+      w._gstc_lt = +new Date;
+      var d = document, g = d.createElement("script");
+      g.type = "text/javascript";
+      g.src = "//d1l6p2sc9645hc.cloudfront.net/tracker.js";
+      var s = d.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(g, s);
+    }
+    w.addEventListener ?
+      w.addEventListener("load", gs, false) :
+      w.attachEvent("onload", gs);
+  })(window);
+</script>
+
+
+<script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '5169d833f5a1f57960000072');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/javascripts/aharris.js"></script>
+
+
+</body>
+</html>

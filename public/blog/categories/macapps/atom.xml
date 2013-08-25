@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: MacApps | NanoXD's Random Ramblings]]></title>
+  <link href="http://blog.nanoxd.net/blog/categories/macapps/atom.xml" rel="self"/>
+  <link href="http://blog.nanoxd.net/"/>
+  <updated>2013-08-25T07:56:11-07:00</updated>
+  <id>http://blog.nanoxd.net/</id>
+  <author>
+    <name><![CDATA[Fernando Paredes]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Make iTerm 2 work with Mac OSX movement keyboard shortcuts]]></title>
+    <link href="http://blog.nanoxd.net/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/"/>
+    <updated>2013-08-04T12:17:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts</id>
+    <content type="html"><![CDATA[<p>After transitioning from Terminal to iTerm 2, you may notice commands like &#8997; + &#8592; (moves left one word) and &#8984; + &#8592; (moves to the beginning of the line) no longer work.</p>
+
+<p>It is very simple process to add the keyboard shortcuts to your profile. Here are the keyboard shortcuts we are adding:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th align="center"> Keyboard Shortcut </th>
+<th align="center">            Description            </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td align="center"> &#8997; + &#8592; </td>
+<td align="center"> Move one word to the left         </td>
+</tr>
+<tr>
+<td></td>
+<td align="center"> &#8997; + &#8594; </td>
+<td align="center"> Move one word to the right        </td>
+</tr>
+<tr>
+<td></td>
+<td align="center"> &#8984; + &#8592; </td>
+<td align="center"> Move to the beginning of the line </td>
+</tr>
+<tr>
+<td></td>
+<td align="center"> &#8984; + &#8594; </td>
+<td align="center"> Move to the end of the line       </td>
+</tr>
+</tbody>
+</table>
+
+
+<h4>1. Open Preferences</h4>
+
+<p><img class="center <a" src="href="http://f.cl.ly/items/3f3m200t0h3x2o1F3C07/Image%202013.08.04%2012%3A44%3A16%20PM.png">http://f.cl.ly/items/3f3m200t0h3x2o1F3C07/Image%202013.08.04%2012%3A44%3A16%20PM.png</a>" title="&lsquo;iTerm Preferences&rsquo;" ></p>
+
+<h4>2. Click on Profiles</h4>
+
+<p>Find the Keys header and click on the <code>+</code> sign to add a new shortcut key.</p>
+
+<p><img class="<a" src="href="http://f.cl.ly/items/0M1L3D0T1K0s0w083K0g/Image%202013.08.04%201%3A12%3A54%20PM.png">http://f.cl.ly/items/0M1L3D0T1K0s0w083K0g/Image%202013.08.04%201%3A12%3A54%20PM.png</a>"></p>
+
+<h4>3. Add Keyboard shortcuts</h4>
+
+<p>Enter each of the following shortcuts below:</p>
+
+<p><img class="<a" src="href="http://f.cl.ly/items/1A3z3a1r1j0i1R1F1G1K/Image%202013.08.04%201%3A16%3A54%20PM.png">http://f.cl.ly/items/1A3z3a1r1j0i1R1F1G1K/Image%202013.08.04%201%3A16%3A54%20PM.png</a>" title="&lsquo;Option + Left&rsquo;" ></p>
+
+<p><img class="<a" src="href="http://f.cl.ly/items/262F1F2y3E0X021I2d3v/Image%202013.08.04%201%3A26%3A57%20PM.png">http://f.cl.ly/items/262F1F2y3E0X021I2d3v/Image%202013.08.04%201%3A26%3A57%20PM.png</a>" title="&lsquo;Option + Right&rsquo;" ></p>
+
+<p><img class="<a" src="href="http://f.cl.ly/items/1l3G0d2A0n1X0r1V0h3s/Image%202013.08.04%201%3A21%3A29%20PM.png">http://f.cl.ly/items/1l3G0d2A0n1X0r1V0h3s/Image%202013.08.04%201%3A21%3A29%20PM.png</a>" title="&lsquo;Command + Left&rsquo;" ></p>
+
+<p><img class="<a" src="href="http://f.cl.ly/items/223X1L3H1M1p2P2U1C3x/Image%202013.08.04%201%3A22%3A54%20PM.png">http://f.cl.ly/items/223X1L3H1M1p2P2U1C3x/Image%202013.08.04%201%3A22%3A54%20PM.png</a>" title="&lsquo;Command + Right" ></p>
+
+<p>Congratulations, you can now move around in iTerm 2 just like Terminal!</p>
+]]></content>
+  </entry>
+  
+</feed>

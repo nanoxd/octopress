@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Passenger | NanoXD's Random Ramblings]]></title>
+  <link href="http://blog.nanoxd.net/blog/categories/passenger/atom.xml" rel="self"/>
+  <link href="http://blog.nanoxd.net/"/>
+  <updated>2013-08-25T07:56:11-07:00</updated>
+  <id>http://blog.nanoxd.net/</id>
+  <author>
+    <name><![CDATA[Fernando Paredes]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps for Ruby Part 1: VPS &amp; Ubuntu Installation]]></title>
+    <link href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/"/>
+    <updated>2013-06-23T21:53:00-07:00</updated>
+    <id>http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation</id>
+    <content type="html"><![CDATA[<p>When you first start learning <em>Ruby</em> or <em>Rails</em> you are expected to learn many different languages at a time. When it comes to deploying that application you hit a crossroad. Will you use a site like <a href="https://www.heroku.com/">Heroku</a> or try your luck at a VPS? For small applications, a cost-comparison will yield Heroku the prime candidate but once you need more dynos it quickly becomes cost-prohibitive. VPSs are an unyielding dragon that quickly breathe fire at a newcomer with it&rsquo;s extensibility. This guide aims to help in lowering the burden and making VPS more accessible to everyone.</p>
+
+<p><em>Notice: This guide is only meant as a starting point.</em></p>
+
+<h2>Picking a Virtual Private Server (VPS)</h2>
+
+<p>There are a plethora of VPS offerings out there. Some are inexpensive, use a different OS, include more ram, offer  more bandwidth. Look around and find one that fits you and your application needs best.</p>
+
+<p>The three VPS providers I hold dear to my heart are <a href="https://www.digitalocean.com/">DigitalOcean</a>, <a href="https://www.linode.com/">Linode</a>, and <a href="http://mediatemple.net/webhosting/vps/developer/index-3.php">MediaTemple DV</a>. DigitalOcean provides SSD cloud servers that can be built in minutes, Linode has quick and painless customization, and MediaTemple while being the most expensive, offers RAID-10. All three providers have excellent customer support and extensive documentation for any error you may encounter.</p>
+
+<p>Try to pick a server with at least:<br/>
+&ndash; 1GB RAM<br/>
+&ndash; 500GB Bandwidth<br/>
+&ndash; 20GB Storage</p>
+
+<h2>Ubuntu Setup and Configuration</h2>
+
+<p>I will cover Ubuntu 13.04 x64 as it is the latest version available on DigitalOcean and Linode.</p>
+
+<p>After selecting the operating system, you will be given a root password and IP to connect to your server. We will be using a terminal (e.g. Terminal or <a href="http://www.iterm2.com/">iTerm2</a>) to connect using the following command:</p>
+
+<p><code>sh
+$ ssh 10.0.0.1
+  root@10.0.0.1's password: TYPE_PASSWORD_HERE
+  Welcome to Ubuntu 13.04 (GNU/Linux 3.8.0-19-generic x86_64)
+</code></p>
+
+<h3>Updates</h3>
+
+<p>The first thing we want to do is make sure our package manager has the latest updates and perform any upgrades.</p>
+
+<p>```</p>
+
+<h1>The first command pulls package lists while the second command runs the install script</h1>
+
+<p>$ sudo apt-get update
+$ sudo apt-get upgrade
+```</p>
+
+<h3>Security</h3>
+
+<p>Next we want to disable root access to the server. We do this by creating a new user using the <code>adduser</code> command. It will ask for a password (ideally different than the root password) and optional personal information.</p>
+
+<p><code>
+$ adduser sample
+Adding user `sample' ...
+Adding new group `sample' (1001) ...
+Adding new user `sample' (1001) with group `sample' ...
+Creating home directory `/home/sample' ...
+Copying files from `/etc/skel' ...
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+Changing the user information for sample
+Is the information correct? [Y/n] Y
+</code></p>
+
+<p>Then we want to allow our new user to have root capabilities by adding it to the sudo list:</p>
+
+<p><code>
+$ sudo visudo
+</code></p>
+
+<p><code>visudo</code> will bring up a document with lots of information. The only part you need to focus on is User privilege specification. We will add our new user to this section like so:</p>
+
+<p>```</p>
+
+<h1>User privilege specification</h1>
+
+<p>root    ALL=(ALL:ALL) ALL
+sample  ALL=(ALL:ALL) ALL
+```</p>
+
+<p>Press <code>Ctrl + X</code> and enter <code>Y</code> to save the document. Next we will disable SSH login to the <code>root</code> login. <em>Note: We will be logging into our newly created account soon!</em></p>
+
+<p>Let&rsquo;s open up the SSH configuration file and find <code>PermitRootLogin</code> under the <code>Authentication</code> tab and change it to look like below:
+```
+$ vim /etc/ssh/sshd_config</p>
+
+<h1>You can also use nano if you don&rsquo;t like vim</h1>
+
+<p>$ nano /etc/ssh/sshd_config</p>
+
+<h1>Authentication:</h1>
+
+<p>LoginGraceTime 120
+PermitRootLogin no
+StrictModes yes
+```</p>
+
+<p>For the changes to take effect you need to run
+<code>
+$ /etc/init.d/ssh restart
+</code></p>
+
+<p>Finally, let&rsquo;s logout from the <code>root</code> account using the <code>logout</code> command.</p>
+
+<p>Now that we are logged out, lets use our new user <code>sample</code> using the following:
+<code>
+$ ssh sample@ip-address
+</code></p>
+
+<h2>Software Installation</h2>
+
+<p>Let&rsquo;s install some basic software before we install <em>rvm</em>. We need <code>curl</code> to download the script for rvm and <code>git</code> for version control.
+<code>
+$ sudo apt-get install curl git-core
+</code></p>
+
+<h3>RVM Installation</h3>
+
+<p>Next, let&rsquo;s install <a href="http://rvm.io/">RVM</a>. RVM stands for Ruby Version Manager and as it&rsquo;s name implies, it manages different versions of Ruby. There are a few alternatives such as <a href="http://rbenv.org/">rbenv</a> and <a href="https://github.com/postmodern/chruby">chruby</a>. You are welcome to pick whichever one you like but the following instructions are for RVM.</p>
+
+<p>First, let&rsquo;s grab RVM:
+<code>
+$ curl -L get.rvm.io | bash -s stable
+</code></p>
+
+<p>After it is done installing, we will need to load it into our environment.
+```
+$ source ~/.rvm/scripts/rvm</p>
+
+<h1>We can verify the install using:</h1>
+
+<p>$ rvm -v</p>
+
+<h1>=> rvm 1.21.2 (stable) by Wayne E. Seguin <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#119;&#97;&#121;&#110;&#101;&#x65;&#115;&#x65;&#x67;&#x75;&#105;&#x6e;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#119;&#97;&#121;&#110;&#101;&#x65;&#115;&#x65;&#x67;&#117;&#x69;&#110;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#109;</a>, Michal Papis <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#109;&#x70;&#97;&#112;&#x69;&#115;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#x6d;">&#109;&#112;&#97;&#112;&#x69;&#115;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a> [<a href="https://rvm.io/">https://rvm.io/</a>]</h1>
+
+<p><code>
+In order to work, RVM has some of its own dependancies that need to be installed. You can install and see what they are using:
+</code>
+$ rvm requirements</p>
+
+<h1>=> Installing required packages: gawk, g++, gcc, make, libc6-dev, libreadline6-dev, zlib1g-dev, libssl-dev, libyaml-dev, libsqlite3-dev, sqlite3, libxml2-dev, libxslt1-dev, autoconf, libc6-dev, libgdbm-dev, libncurses5-dev, automake, libtool, bison, pkg-config, libffi-dev</h1>
+
+<p>```</p>
+
+<h3>Ruby Installation</h3>
+
+<p>Now that RVM is installed we can install the latest patch level of Ruby 2 using:
+```
+$ rvm install 2.0.0</p>
+
+<h1>To install 1.9.3</h1>
+
+<p>$ rvm install 1.9.3
+<code>
+Once the version of Ruby you selected is finished installing, we can make it the _default_ Ruby version.
+</code>
+$ rvm &mdash;default use 2.0.0
+```</p>
+
+<h3>Rails Installation</h3>
+
+<p><em>Feel free to skip this section if you are using <a href="http://www.sinatrarb.com/">Sinatra</a>.</em></p>
+
+<p>Installing Rails is very simple, the only hard part is deciding what version you want to use.</p>
+
+<h4>Rails 3.2</h4>
+
+<p>Great! You picked the battle-tested Rails 3.2, which means less typing!</p>
+
+<p><code>
+$ gem install rails --version 3.2.13
+</code></p>
+
+<p>To verify the version installed run <code>rails -v</code></p>
+
+<h4>Rails 4</h4>
+
+<p><strong>Update: Rails 4 was released today on June 25th, 2013</strong>
+So you want to see what the hype is about? What are Turbolinks and Strong Parameters? Maybe you like to play with the Russian Doll Caching. Whatever it is, we can install it using:</p>
+
+<p><code>
+$ gem install rails
+</code></p>
+
+<p>Let&rsquo;s run <code>rails -v</code> to verify our version number matches 4.0.0 RC2.</p>
+
+<h3>PostgreSQL</h3>
+
+<p>PostgreSQL is a highly regarded database in the Rails community as an object-relational database management system. To install it on Ubuntu run the following:
+<code>
+$ sudo apt-get install postgresql
+</code></p>
+
+<p>For security purposes, we will change the <code>postgres</code> user password using:
+<code>
+$ sudo -u postgres psql postgres
+</code></p>
+
+<p>The command will drop us into a psql session. Enter the following to change the default password:
+```sql
+\password postgres</p>
+
+<h1>Enter new password:</h1>
+
+<h1>Enter it again:</h1>
+
+<p>```</p>
+
+<p>Once you are finished, press <code>Ctrl + D</code> to terminate the psql session. Next we need to allow communication to the Postgres server from our Rails app. Let&rsquo;s open up the default configuration:
+<code>
+$ sudo nano /etc/postgresql/9.1/main/postgresql.conf
+</code>
+We are looking for a block that is commented out that allows localhost connections. Uncomment the line like so:
+<code>diff
+- #listen_addresses = 'localhost'
++ listen_addresses = 'localhost'
+</code></p>
+
+<p>All we need now is a Postgres server reboot:
+<code>
+$ sudo service postgresql restart
+</code></p>
+
+<h3>Passenger + Nginx Installation</h3>
+
+<p>My favorite app-server + web-server are Passenger and Nginx due to the ease of installation. First we will install the Passenger gem and setup the Nginx module.
+<code>
+$ gem install passenger
+$ rvmsudo passenger-install-nginx-module
+</code></p>
+
+<p>You will be presented with three choices. Choose Option 1 to automate the installation of Nginx. You might have some missing package dependencies, follow the installation instructions for them and rerun <code>rvmsudo passenger-install-nginx-module</code></p>
+
+<p>Nginx is now installed and configured on your machine but it is recommended to install the following script to start, stop, or restart nginx.
+<code>
+wget -O init-deb.sh http://library.linode.com/assets/660-init-deb.sh
+mv init-deb.sh /etc/init.d/nginx
+chmod +x /etc/init.d/nginx
+/usr/sbin/update-rc.d -f nginx defaults
+</code></p>
+
+<p>The following commands will allow you to easily start or stop Nginx:
+<code>
+sudo /etc/init.d/nginx stop
+sudo /etc/init.d/nginx start
+</code></p>
+
+<p>Congratulations, you are done with the first part of your VPS deployment. If you visit the ip address of your VPS, you will be greeted with the standard &ldquo;Welcome to nginx!&rdquo; page.</p>
+
+<p>Check back for Part two next week!</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="https://help.ubuntu.com/community/PostgreSQL">Ubuntu PostgreSQL</a></li>
+<li><a href="https://library.linode.com/web-servers/nginx/installation/ubuntu-10.04-lucid">Nginx Init Script</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
