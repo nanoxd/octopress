@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[NanoXD's Random Ramblings]]></title>
-  <link href="http://blog.nanoxd.net/atom.xml" rel="self"/>
-  <link href="http://blog.nanoxd.net/"/>
-  <updated>2013-08-25T07:56:11-07:00</updated>
-  <id>http://blog.nanoxd.net/</id>
+  <link href="http://blog.fdp.io/atom.xml" rel="self"/>
+  <link href="http://blog.fdp.io/"/>
+  <updated>2013-09-02T09:47:01-07:00</updated>
+  <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
     
@@ -14,10 +14,94 @@
 
   
   <entry>
+    <title type="html"><![CDATA[How to view open connections on files]]></title>
+    <link href="http://blog.fdp.io/2013/09/01/how-to-view-open-connections-on-files/"/>
+    <updated>2013-09-01T20:01:00-07:00</updated>
+    <id>http://blog.fdp.io/2013/09/01/how-to-view-open-connections-on-files</id>
+    <content type="html"><![CDATA[<p>During a pairing session on Ruby, we had an issue with what file the API was stuck on. Luckily, there is a command <code>lsof</code> which stands for list open files.</p>
+
+<h2>Usage</h2>
+
+<p>When <code>lsof</code> is ran without parameters, it will show all the files opened by <em>any</em> process. It can get a bit messy, so I recommend <code>grep</code>ing through to find the file/process you want.</p>
+
+<p>To find out what files Ruby has opened you can use <code>lsof -c</code>. Here is what it looks like when running <code>rails server</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof -c ruby
+</span><span class='line'>ruby    55222 nano   10w   REG    1,1   1214625 34875337 ~/Developer/Projects/contact-manager/log/development.log
+</span><span class='line'>ruby    55222 nano   11u   REG    1,1     49152 34875460 ~/Developer/Projects/contact-manager/db/development.sqlite3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To find out what is accessing any file in a directory, use the <code>lsof +D /usr/directory</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof +D /Users/nano/Developer/Projects/contact-manager
+</span><span class='line'>vim     44957 nano  cwd    DIR    1,1      748 34873022 ~/Developer/Projects/contact-manager
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can list all opened internet sockets using <code>lsof -i</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof -i :62658
+</span><span class='line'>Rdio      63484 nano   23u  IPv4 0x2674679fdf954c9b      0t0  TCP 10.0.1.14:62658-&gt;8.18.203.81:sunproxyadmin <span class="o">(</span>ESTABLISHED<span class="o">)</span>
+</span><span class='line'><span class="c"># We can find out the process id for Unicorn running on port 8080</span>
+</span><span class='line'><span class="nv">$ </span>lsof -i :8080
+</span><span class='line'>COMMAND   PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+</span><span class='line'>ruby    54171 nano    9u  IPv4 0x2674679fe1b36243      0t0  TCP *:http-alt <span class="o">(</span>LISTEN<span class="o">)</span>
+</span><span class='line'>ruby    54172 nano    9u  IPv4 0x2674679fe1b36243      0t0  TCP *:http-alt <span class="o">(</span>LISTEN<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After finding the process id, you can find out what that process is accessing using <code>lsof +p PID</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof +p 79766
+</span><span class='line'>COMMAND   PID USER   FD   TYPE             DEVICE  SIZE/OFF     NODE NAME
+</span><span class='line'>ruby    54172 nano  cwd    DIR                1,1       748 34873022 ~/Developer/Projects/contact-manager
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1      9184 17640590 ~/.rvm/rubies/ruby-2.0.0-p247/bin/ruby
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1   2793108 17640592 ~/.rvm/rubies/ruby-2.0.0-p247/lib/libruby.2.0.0.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1    118244   615195 /usr/local/Cellar/libyaml/0.1.4/lib/libyaml-0.2.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1    378152   797957 /usr/local/Cellar/openssl/1.0.1e/lib/libssl.1.0.0.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1   1663200   797956 /usr/local/Cellar/openssl/1.0.1e/lib/libcrypto.1.0.0.dylib
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using several commands leads you to any files that may be <em>stuck</em> in processing. I have found that it is an essential tool in debugging a multitude of issues.</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://www.catonmat.net/blog/unix-utilities-lsof/">A Unix Utility You Should Know About: lsof</a></li>
+<li><a href="http://linux.die.net/man/8/lsof">man lsof</a></li>
+<li><a href="http://stackoverflow.com/questions/106234/lsof-survival-guide">lsof Survival Guide</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Make iTerm 2 work with Mac OSX movement keyboard shortcuts]]></title>
-    <link href="http://blog.nanoxd.net/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/"/>
+    <link href="http://blog.fdp.io/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/"/>
     <updated>2013-08-04T12:17:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts</id>
+    <id>http://blog.fdp.io/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts</id>
     <content type="html"><![CDATA[<p>After transitioning from Terminal to iTerm 2, you may notice commands like &#8997; + &#8592; (moves left one word) and &#8984; + &#8592; (moves to the beginning of the line) no longer work.</p>
 
 <p>It is very simple process to add the keyboard shortcuts to your profile. Here are the keyboard shortcuts we are adding:</p>
@@ -83,10 +167,10 @@
   
   <entry>
     <title type="html"><![CDATA[DevOps for Ruby Part 2: Using Nginx to Host Rails Applications]]></title>
-    <link href="http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/"/>
+    <link href="http://blog.fdp.io/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/"/>
     <updated>2013-07-06T19:26:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications</id>
-    <content type="html"><![CDATA[<p>In <a href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
+    <id>http://blog.fdp.io/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications</id>
+    <content type="html"><![CDATA[<p>In <a href="http://blog.fdp.io/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
 
 <h2>Objectives</h2>
 
@@ -148,7 +232,7 @@
 
 <h3>Configuring your database.yml</h3>
 
-<p>Each Rails application comes with a <code>database.yml</code> file like I described in <a href="http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac/">Setup PostgreSQL for Rails on a Mac</a>. Let&rsquo;s modify this file to connect to our new PostgreSQL database.</p>
+<p>Each Rails application comes with a <code>database.yml</code> file like I described in <a href="http://blog.fdp.io/2013/05/23/setup-postgresql-for-rails-on-a-mac/">Setup PostgreSQL for Rails on a Mac</a>. Let&rsquo;s modify this file to connect to our new PostgreSQL database.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -265,8 +349,8 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The two Passenger settings that have to suit your machine are:<br/>
-<code>passenger_root</code> &ndash; Specifies where Passenger is<br/>
+<p>The two Passenger settings that have to suit your machine are:
+<code>passenger_root</code> &ndash; Specifies where Passenger is
 <code>passenger_ruby</code> &ndash; Tells Passenger what version of Ruby to use.</p>
 
 <p>We created two server settings for each application. Here is what each setting means:</p>
@@ -324,9 +408,9 @@
   
   <entry>
     <title type="html"><![CDATA[DevOps for Ruby Part 1: VPS &amp; Ubuntu Installation]]></title>
-    <link href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/"/>
+    <link href="http://blog.fdp.io/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/"/>
     <updated>2013-06-23T21:53:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation</id>
+    <id>http://blog.fdp.io/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation</id>
     <content type="html"><![CDATA[<p>When you first start learning <em>Ruby</em> or <em>Rails</em> you are expected to learn many different languages at a time. When it comes to deploying that application you hit a crossroad. Will you use a site like <a href="https://www.heroku.com/">Heroku</a> or try your luck at a VPS? For small applications, a cost-comparison will yield Heroku the prime candidate but once you need more dynos it quickly becomes cost-prohibitive. VPSs are an unyielding dragon that quickly breathe fire at a newcomer with it&rsquo;s extensibility. This guide aims to help in lowering the burden and making VPS more accessible to everyone.</p>
 
 <p><em>Notice: This guide is only meant as a starting point.</em></p>
@@ -650,9 +734,9 @@ So you want to see what the hype is about? What are Turbolinks and Strong Parame
   
   <entry>
     <title type="html"><![CDATA[Setup PostgreSQL for Rails on a Mac]]></title>
-    <link href="http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac/"/>
+    <link href="http://blog.fdp.io/2013/05/23/setup-postgresql-for-rails-on-a-mac/"/>
     <updated>2013-05-23T14:57:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac</id>
+    <id>http://blog.fdp.io/2013/05/23/setup-postgresql-for-rails-on-a-mac</id>
     <content type="html"><![CDATA[<h2>Pick your elephant poison</h2>
 
 <p>There are a myriad of ways to install PostgreSQL on a Mac. I will be going over <code>brew</code> and <strong>Postgres.app</strong>. I like to go with the app as it eases into my workflow but does require it&rsquo;s path to be set in your profile (e.g <code>.zshrc</code>, <code>.bashrc</code>, or <code>fish.config</code>)</p>
@@ -807,9 +891,9 @@ You will then have to run <code>rake db:create:all</code> to create the database
   
   <entry>
     <title type="html"><![CDATA[Venture into tmux]]></title>
-    <link href="http://blog.nanoxd.net/2013/05/06/venture-into-tmux/"/>
+    <link href="http://blog.fdp.io/2013/05/06/venture-into-tmux/"/>
     <updated>2013-05-06T09:00:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/05/06/venture-into-tmux</id>
+    <id>http://blog.fdp.io/2013/05/06/venture-into-tmux</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently gotten into tmux after experimenting with <code>vim</code> as my main editor. I initially had a frustrating experience until I changed the keybindings and used it to have my editor, <code>guard</code>, and <code>rails server</code> running on a single screen.</p>
 
 <h2>Definition</h2>
@@ -1015,9 +1099,9 @@ Split the window into two horizontal panes: <code>Prefix + -</code></p>
   
   <entry>
     <title type="html"><![CDATA[Ammending git commits]]></title>
-    <link href="http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands/"/>
+    <link href="http://blog.fdp.io/2013/04/12/extremely-useful-git-commands/"/>
     <updated>2013-04-12T08:11:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands</id>
+    <id>http://blog.fdp.io/2013/04/12/extremely-useful-git-commands</id>
     <content type="html"><![CDATA[<p>During the past few years of using git, I&rsquo;ve come across several commands which have become pivotal in my workflow. One of them is <code>git commit --amend</code>.</p>
 
 <h2>Amending a commit</h2>

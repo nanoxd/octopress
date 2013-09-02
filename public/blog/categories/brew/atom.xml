@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: brew | NanoXD's Random Ramblings]]></title>
-  <link href="http://blog.nanoxd.net/blog/categories/brew/atom.xml" rel="self"/>
-  <link href="http://blog.nanoxd.net/"/>
-  <updated>2013-08-25T07:56:12-07:00</updated>
-  <id>http://blog.nanoxd.net/</id>
+  <link href="http://blog.fdp.io/blog/categories/brew/atom.xml" rel="self"/>
+  <link href="http://blog.fdp.io/"/>
+  <updated>2013-09-02T09:47:01-07:00</updated>
+  <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Venture into tmux]]></title>
-    <link href="http://blog.nanoxd.net/2013/05/06/venture-into-tmux/"/>
+    <link href="http://blog.fdp.io/2013/05/06/venture-into-tmux/"/>
     <updated>2013-05-06T09:00:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/05/06/venture-into-tmux</id>
+    <id>http://blog.fdp.io/2013/05/06/venture-into-tmux</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently gotten into tmux after experimenting with <code>vim</code> as my main editor. I initially had a frustrating experience until I changed the keybindings and used it to have my editor, <code>guard</code>, and <code>rails server</code> running on a single screen.</p>
 
 <h2>Definition</h2>

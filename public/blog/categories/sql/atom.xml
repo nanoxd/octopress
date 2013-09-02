@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: SQL | NanoXD's Random Ramblings]]></title>
-  <link href="http://blog.nanoxd.net/blog/categories/sql/atom.xml" rel="self"/>
-  <link href="http://blog.nanoxd.net/"/>
-  <updated>2013-08-25T07:56:12-07:00</updated>
-  <id>http://blog.nanoxd.net/</id>
+  <link href="http://blog.fdp.io/blog/categories/sql/atom.xml" rel="self"/>
+  <link href="http://blog.fdp.io/"/>
+  <updated>2013-09-02T09:47:01-07:00</updated>
+  <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Setup PostgreSQL for Rails on a Mac]]></title>
-    <link href="http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac/"/>
+    <link href="http://blog.fdp.io/2013/05/23/setup-postgresql-for-rails-on-a-mac/"/>
     <updated>2013-05-23T14:57:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/05/23/setup-postgresql-for-rails-on-a-mac</id>
+    <id>http://blog.fdp.io/2013/05/23/setup-postgresql-for-rails-on-a-mac</id>
     <content type="html"><![CDATA[<h2>Pick your elephant poison</h2>
 
 <p>There are a myriad of ways to install PostgreSQL on a Mac. I will be going over <code>brew</code> and <strong>Postgres.app</strong>. I like to go with the app as it eases into my workflow but does require it&rsquo;s path to be set in your profile (e.g <code>.zshrc</code>, <code>.bashrc</code>, or <code>fish.config</code>)</p>

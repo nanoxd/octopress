@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: VPS | NanoXD's Random Ramblings]]></title>
-  <link href="http://blog.nanoxd.net/blog/categories/vps/atom.xml" rel="self"/>
-  <link href="http://blog.nanoxd.net/"/>
-  <updated>2013-08-25T07:56:11-07:00</updated>
-  <id>http://blog.nanoxd.net/</id>
+  <link href="http://blog.fdp.io/blog/categories/vps/atom.xml" rel="self"/>
+  <link href="http://blog.fdp.io/"/>
+  <updated>2013-09-02T09:47:01-07:00</updated>
+  <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
     
@@ -15,10 +15,10 @@
   
   <entry>
     <title type="html"><![CDATA[DevOps for Ruby Part 2: Using Nginx to Host Rails Applications]]></title>
-    <link href="http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/"/>
+    <link href="http://blog.fdp.io/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/"/>
     <updated>2013-07-06T19:26:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications</id>
-    <content type="html"><![CDATA[<p>In <a href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
+    <id>http://blog.fdp.io/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications</id>
+    <content type="html"><![CDATA[<p>In <a href="http://blog.fdp.io/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
 
 <h2>Objectives</h2>
 
@@ -144,8 +144,8 @@ server {
 <p>}
 ```</p>
 
-<p>The two Passenger settings that have to suit your machine are:<br/>
-<code>passenger_root</code> &ndash; Specifies where Passenger is<br/>
+<p>The two Passenger settings that have to suit your machine are:
+<code>passenger_root</code> &ndash; Specifies where Passenger is
 <code>passenger_ruby</code> &ndash; Tells Passenger what version of Ruby to use.</p>
 
 <p>We created two server settings for each application. Here is what each setting means:</p>

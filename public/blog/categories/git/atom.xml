@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: git | NanoXD's Random Ramblings]]></title>
-  <link href="http://blog.nanoxd.net/blog/categories/git/atom.xml" rel="self"/>
-  <link href="http://blog.nanoxd.net/"/>
-  <updated>2013-08-25T07:56:12-07:00</updated>
-  <id>http://blog.nanoxd.net/</id>
+  <link href="http://blog.fdp.io/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://blog.fdp.io/"/>
+  <updated>2013-09-02T09:47:01-07:00</updated>
+  <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
     
@@ -15,22 +15,27 @@
   
   <entry>
     <title type="html"><![CDATA[Ammending git commits]]></title>
-    <link href="http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands/"/>
+    <link href="http://blog.fdp.io/2013/04/12/extremely-useful-git-commands/"/>
     <updated>2013-04-12T08:11:00-07:00</updated>
-    <id>http://blog.nanoxd.net/2013/04/12/extremely-useful-git-commands</id>
+    <id>http://blog.fdp.io/2013/04/12/extremely-useful-git-commands</id>
     <content type="html"><![CDATA[<p>During the past few years of using git, I&rsquo;ve come across several commands which have become pivotal in my workflow. One of them is <code>git commit --amend</code>.</p>
 
 <h2>Amending a commit</h2>
 
 <p>How many times have you inadvertantly forgotten to include a file in your last commit? I know my <a href="http://github.com">Github</a> can attest to my forgetfullness. We will first start out by creating a file named <code>help.md</code></p>
 
-<p>{% codeblock %}</p>
-
-<h1>Help</h1>
-
-<p>Nothing can stop the man with the right mental attitude from achieving his goal; nothing on
-earth can help the man with the wrong mental attitude.
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>Help&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>Nothing can stop the man with the right mental attitude from achieving his goal; nothing on
+</span><span class='line'>earth can help the man with the wrong mental attitude.</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p><code>bash
 git add help.md

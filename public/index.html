@@ -9,7 +9,7 @@
   <meta name="author" content="Fernando Paredes">
 
   
-  <meta name="description" content="NanoXD&#8217;s Random Ramblings Aug 4th, 2013 Comments MacApps Terminal iTerm2 Make iTerm 2 work with Mac OSX movement keyboard shortcuts After &hellip;">
+  <meta name="description" content="NanoXD&#8217;s Random Ramblings Sep 1st, 2013 Comments CLI Debugging Linux How to view open connections on files During a pairing session on Ruby, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.nanoxd.net">
+  <link rel="canonical" href="http://blog.fdp.io">
   <link href="/favicon.ico" rel="icon">
   <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
@@ -119,10 +119,137 @@
   
 
 
+<i class="icon-calendar-empty"></i> <time datetime="2013-09-01T20:01:00-07:00" pubdate data-updated="true">Sep 1<span>st</span>, 2013</time></h5>
+          <div class="row-fluid">
+          
+          <a href="http://blog.fdp.io/2013/09/01/how-to-view-open-connections-on-files/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
+          
+          </div>
+          
+          <div class="row-fluid">
+          
+          <a href="/blog/categories/CLI/"><span class="badge">CLI</span></a>
+          
+          <a href="/blog/categories/Debugging/"><span class="badge">Debugging</span></a>
+          
+          <a href="/blog/categories/Linux/"><span class="badge">Linux</span></a>
+          
+          </div>
+          
+    </div>
+    <div class="span10">
+      <h1 class="link"><a href="/2013/09/01/how-to-view-open-connections-on-files/">How to view open connections on files</a></h1>
+      <p>During a pairing session on Ruby, we had an issue with what file the API was stuck on. Luckily, there is a command <code>lsof</code> which stands for list open files.</p>
+
+<h2>Usage</h2>
+
+<p>When <code>lsof</code> is ran without parameters, it will show all the files opened by <em>any</em> process. It can get a bit messy, so I recommend <code>grep</code>ing through to find the file/process you want.</p>
+
+<p>To find out what files Ruby has opened you can use <code>lsof -c</code>. Here is what it looks like when running <code>rails server</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof -c ruby
+</span><span class='line'>ruby    55222 nano   10w   REG    1,1   1214625 34875337 ~/Developer/Projects/contact-manager/log/development.log
+</span><span class='line'>ruby    55222 nano   11u   REG    1,1     49152 34875460 ~/Developer/Projects/contact-manager/db/development.sqlite3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To find out what is accessing any file in a directory, use the <code>lsof +D /usr/directory</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof +D /Users/nano/Developer/Projects/contact-manager
+</span><span class='line'>vim     44957 nano  cwd    DIR    1,1      748 34873022 ~/Developer/Projects/contact-manager
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can list all opened internet sockets using <code>lsof -i</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof -i :62658
+</span><span class='line'>Rdio      63484 nano   23u  IPv4 0x2674679fdf954c9b      0t0  TCP 10.0.1.14:62658-&gt;8.18.203.81:sunproxyadmin <span class="o">(</span>ESTABLISHED<span class="o">)</span>
+</span><span class='line'><span class="c"># We can find out the process id for Unicorn running on port 8080</span>
+</span><span class='line'><span class="nv">$ </span>lsof -i :8080
+</span><span class='line'>COMMAND   PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+</span><span class='line'>ruby    54171 nano    9u  IPv4 0x2674679fe1b36243      0t0  TCP *:http-alt <span class="o">(</span>LISTEN<span class="o">)</span>
+</span><span class='line'>ruby    54172 nano    9u  IPv4 0x2674679fe1b36243      0t0  TCP *:http-alt <span class="o">(</span>LISTEN<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After finding the process id, you can find out what that process is accessing using <code>lsof +p PID</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof +p 79766
+</span><span class='line'>COMMAND   PID USER   FD   TYPE             DEVICE  SIZE/OFF     NODE NAME
+</span><span class='line'>ruby    54172 nano  cwd    DIR                1,1       748 34873022 ~/Developer/Projects/contact-manager
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1      9184 17640590 ~/.rvm/rubies/ruby-2.0.0-p247/bin/ruby
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1   2793108 17640592 ~/.rvm/rubies/ruby-2.0.0-p247/lib/libruby.2.0.0.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1    118244   615195 /usr/local/Cellar/libyaml/0.1.4/lib/libyaml-0.2.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1    378152   797957 /usr/local/Cellar/openssl/1.0.1e/lib/libssl.1.0.0.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1   1663200   797956 /usr/local/Cellar/openssl/1.0.1e/lib/libcrypto.1.0.0.dylib
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using several commands leads you to any files that may be <em>stuck</em> in processing. I have found that it is an essential tool in debugging a multitude of issues.</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://www.catonmat.net/blog/unix-utilities-lsof/">A Unix Utility You Should Know About: lsof</a></li>
+<li><a href="http://linux.die.net/man/8/lsof">man lsof</a></li>
+<li><a href="http://stackoverflow.com/questions/106234/lsof-survival-guide">lsof Survival Guide</a></li>
+</ul>
+
+
+      
+      
+    </div>
+  </div>
+
+
+
+    </article>
+    
+    <hr>
+    
+  
+  
+    <article>
+      
+
+  <div class="row-fluid">
+    <div class="span2">
+		<h1 class="date-time">
+
+
+
+
+
+
+
+
+  
+
+
 <i class="icon-calendar-empty"></i> <time datetime="2013-08-04T12:17:00-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2013</time></h5>
           <div class="row-fluid">
           
-          <a href="http://blog.nanoxd.net/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
+          <a href="http://blog.fdp.io/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
           
           </div>
           
@@ -233,7 +360,7 @@
 <i class="icon-calendar-empty"></i> <time datetime="2013-07-06T19:26:00-07:00" pubdate data-updated="true">Jul 6<span>th</span>, 2013</time></h5>
           <div class="row-fluid">
           
-          <a href="http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
+          <a href="http://blog.fdp.io/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
           
           </div>
           
@@ -256,7 +383,7 @@
     </div>
     <div class="span10">
       <h1 class="link"><a href="/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/">DevOps for Ruby Part 2: Using Nginx to Host Rails Applications</a></h1>
-      <p>In <a href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
+      <p>In <a href="http://blog.fdp.io/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
 
 <h2>Objectives</h2>
 
@@ -435,8 +562,8 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The two Passenger settings that have to suit your machine are:<br/>
-<code>passenger_root</code> &ndash; Specifies where Passenger is<br/>
+<p>The two Passenger settings that have to suit your machine are:
+<code>passenger_root</code> &ndash; Specifies where Passenger is
 <code>passenger_ruby</code> &ndash; Tells Passenger what version of Ruby to use.</p>
 
 <p>We created two server settings for each application. Here is what each setting means:</p>
@@ -489,387 +616,6 @@
 
 
 <p>We are officially done with the manual work! We will be going over ways to automate this setup using tools like Capistrano and Chef in DevOps Part 3.</p>
-
-      
-      
-    </div>
-  </div>
-
-
-
-    </article>
-    
-    <hr>
-    
-  
-  
-    <article>
-      
-
-  <div class="row-fluid">
-    <div class="span2">
-		<h1 class="date-time">
-
-
-
-
-
-
-
-
-  
-
-
-<i class="icon-calendar-empty"></i> <time datetime="2013-06-23T21:53:00-07:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time></h5>
-          <div class="row-fluid">
-          
-          <a href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
-          
-          </div>
-          
-          <div class="row-fluid">
-          
-          <a href="/blog/categories/DevOps/"><span class="badge">DevOps</span></a>
-          
-          <a href="/blog/categories/Nginx/"><span class="badge">Nginx</span></a>
-          
-          <a href="/blog/categories/Passenger/"><span class="badge">Passenger</span></a>
-          
-          <a href="/blog/categories/PostgreSQL/"><span class="badge">PostgreSQL</span></a>
-          
-          <a href="/blog/categories/RVM/"><span class="badge">RVM</span></a>
-          
-          <a href="/blog/categories/Rails/"><span class="badge">Rails</span></a>
-          
-          <a href="/blog/categories/Ruby/"><span class="badge">Ruby</span></a>
-          
-          <a href="/blog/categories/Setup/"><span class="badge">Setup</span></a>
-          
-          <a href="/blog/categories/Ubuntu/"><span class="badge">Ubuntu</span></a>
-          
-          </div>
-          
-    </div>
-    <div class="span10">
-      <h1 class="link"><a href="/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1: VPS &amp; Ubuntu Installation</a></h1>
-      <p>When you first start learning <em>Ruby</em> or <em>Rails</em> you are expected to learn many different languages at a time. When it comes to deploying that application you hit a crossroad. Will you use a site like <a href="https://www.heroku.com/">Heroku</a> or try your luck at a VPS? For small applications, a cost-comparison will yield Heroku the prime candidate but once you need more dynos it quickly becomes cost-prohibitive. VPSs are an unyielding dragon that quickly breathe fire at a newcomer with it&rsquo;s extensibility. This guide aims to help in lowering the burden and making VPS more accessible to everyone.</p>
-
-<p><em>Notice: This guide is only meant as a starting point.</em></p>
-
-<h2>Picking a Virtual Private Server (VPS)</h2>
-
-<p>There are a plethora of VPS offerings out there. Some are inexpensive, use a different OS, include more ram, offer  more bandwidth. Look around and find one that fits you and your application needs best.</p>
-
-<p>The three VPS providers I hold dear to my heart are <a href="https://www.digitalocean.com/">DigitalOcean</a>, <a href="https://www.linode.com/">Linode</a>, and <a href="http://mediatemple.net/webhosting/vps/developer/index-3.php">MediaTemple DV</a>. DigitalOcean provides SSD cloud servers that can be built in minutes, Linode has quick and painless customization, and MediaTemple while being the most expensive, offers RAID-10. All three providers have excellent customer support and extensive documentation for any error you may encounter.</p>
-
-<p>Try to pick a server with at least:<br/>
-&ndash; 1GB RAM<br/>
-&ndash; 500GB Bandwidth<br/>
-&ndash; 20GB Storage</p>
-
-<h2>Ubuntu Setup and Configuration</h2>
-
-<p>I will cover Ubuntu 13.04 x64 as it is the latest version available on DigitalOcean and Linode.</p>
-
-<p>After selecting the operating system, you will be given a root password and IP to connect to your server. We will be using a terminal (e.g. Terminal or <a href="http://www.iterm2.com/">iTerm2</a>) to connect using the following command:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>ssh 10.0.0.1
-</span><span class='line'>  root@10.0.0.1<span class="err">&#39;</span>s password: TYPE_PASSWORD_HERE
-</span><span class='line'>  Welcome to Ubuntu 13.04 <span class="o">(</span>GNU/Linux 3.8.0-19-generic x86_64<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Updates</h3>
-
-<p>The first thing we want to do is make sure our package manager has the latest updates and perform any upgrades.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># The first command pulls package lists while the second command runs the install script</span>
-</span><span class='line'><span class="nv">$ </span>sudo apt-get update
-</span><span class='line'><span class="nv">$ </span>sudo apt-get upgrade
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Security</h3>
-
-<p>Next we want to disable root access to the server. We do this by creating a new user using the <code>adduser</code> command. It will ask for a password (ideally different than the root password) and optional personal information.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>adduser sample
-</span><span class='line'>Adding user <span class="sb">`</span>sample<span class="s1">&#39; ...</span>
-</span><span class='line'><span class="s1">Adding new group `sample&#39;</span> <span class="o">(</span>1001<span class="o">)</span> ...
-</span><span class='line'>Adding new user <span class="sb">`</span>sample<span class="s1">&#39; (1001) with group `sample&#39;</span> ...
-</span><span class='line'>Creating home directory <span class="sb">`</span>/home/sample<span class="s1">&#39; ...</span>
-</span><span class='line'><span class="s1">Copying files from `/etc/skel&#39;</span> ...
-</span><span class='line'>Enter new UNIX password:
-</span><span class='line'>Retype new UNIX password:
-</span><span class='line'>passwd: password updated successfully
-</span><span class='line'>Changing the user information <span class="k">for </span>sample
-</span><span class='line'>Is the information correct? <span class="o">[</span>Y/n<span class="o">]</span> Y
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then we want to allow our new user to have root capabilities by adding it to the sudo list:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo visudo
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>visudo</code> will bring up a document with lots of information. The only part you need to focus on is User privilege specification. We will add our new user to this section like so:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># User privilege specification</span>
-</span><span class='line'>root    <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
-</span><span class='line'>sample  <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Press <code>Ctrl + X</code> and enter <code>Y</code> to save the document. Next we will disable SSH login to the <code>root</code> login. <em>Note: We will be logging into our newly created account soon!</em></p>
-
-<p>Let&rsquo;s open up the SSH configuration file and find <code>PermitRootLogin</code> under the <code>Authentication</code> tab and change it to look like below:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>vim /etc/ssh/sshd_config
-</span><span class='line'><span class="c"># You can also use nano if you don&#39;t like vim</span>
-</span><span class='line'><span class="nv">$ </span>nano /etc/ssh/sshd_config
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Authentication:</span>
-</span><span class='line'>LoginGraceTime 120
-</span><span class='line'>PermitRootLogin no
-</span><span class='line'>StrictModes yes
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For the changes to take effect you need to run</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>/etc/init.d/ssh restart
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally, let&rsquo;s logout from the <code>root</code> account using the <code>logout</code> command.</p>
-
-<p>Now that we are logged out, lets use our new user <code>sample</code> using the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>ssh sample@ip-address
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Software Installation</h2>
-
-<p>Let&rsquo;s install some basic software before we install <em>rvm</em>. We need <code>curl</code> to download the script for rvm and <code>git</code> for version control.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo apt-get install curl git-core
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>RVM Installation</h3>
-
-<p>Next, let&rsquo;s install <a href="http://rvm.io/">RVM</a>. RVM stands for Ruby Version Manager and as it&rsquo;s name implies, it manages different versions of Ruby. There are a few alternatives such as <a href="http://rbenv.org/">rbenv</a> and <a href="https://github.com/postmodern/chruby">chruby</a>. You are welcome to pick whichever one you like but the following instructions are for RVM.</p>
-
-<p>First, let&rsquo;s grab RVM:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>curl -L get.rvm.io | bash -s stable
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After it is done installing, we will need to load it into our environment.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">source</span> ~/.rvm/scripts/rvm
-</span><span class='line'><span class="c"># We can verify the install using:</span>
-</span><span class='line'><span class="nv">$ </span>rvm -v
-</span><span class='line'><span class="c">#=&gt; rvm 1.21.2 (stable) by Wayne E. Seguin &lt;wayneeseguin@gmail.com&gt;, Michal Papis &lt;mpapis@gmail.com&gt; [https://rvm.io/]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In order to work, RVM has some of its own dependancies that need to be installed. You can install and see what they are using:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rvm requirements
-</span><span class='line'><span class="c">#=&gt; Installing required packages: gawk, g++, gcc, make, libc6-dev, libreadline6-dev, zlib1g-dev, libssl-dev, libyaml-dev, libsqlite3-dev, sqlite3, libxml2-dev, libxslt1-dev, autoconf, libc6-dev, libgdbm-dev, libncurses5-dev, automake, libtool, bison, pkg-config, libffi-dev</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Ruby Installation</h3>
-
-<p>Now that RVM is installed we can install the latest patch level of Ruby 2 using:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rvm install 2.0.0
-</span><span class='line'><span class="c"># To install 1.9.3</span>
-</span><span class='line'><span class="nv">$ </span>rvm install 1.9.3
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once the version of Ruby you selected is finished installing, we can make it the <em>default</em> Ruby version.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rvm --default use 2.0.0
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Rails Installation</h3>
-
-<p><em>Feel free to skip this section if you are using <a href="http://www.sinatrarb.com/">Sinatra</a>.</em></p>
-
-<p>Installing Rails is very simple, the only hard part is deciding what version you want to use.</p>
-
-<h4>Rails 3.2</h4>
-
-<p>Great! You picked the battle-tested Rails 3.2, which means less typing!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>gem install rails --version 3.2.13
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To verify the version installed run <code>rails -v</code></p>
-
-<h4>Rails 4</h4>
-
-<p><strong>Update: Rails 4 was released today on June 25th, 2013</strong>
-So you want to see what the hype is about? What are Turbolinks and Strong Parameters? Maybe you like to play with the Russian Doll Caching. Whatever it is, we can install it using:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>gem install rails
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s run <code>rails -v</code> to verify our version number matches 4.0.0 RC2.</p>
-
-<h3>PostgreSQL</h3>
-
-<p>PostgreSQL is a highly regarded database in the Rails community as an object-relational database management system. To install it on Ubuntu run the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo apt-get install postgresql
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For security purposes, we will change the <code>postgres</code> user password using:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo -u postgres psql postgres
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The command will drop us into a psql session. Enter the following to change the default password:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="err">\</span><span class="n">password</span> <span class="n">postgres</span>
-</span><span class='line'><span class="o">#</span> <span class="n">Enter</span> <span class="k">new</span> <span class="n">password</span><span class="p">:</span>
-</span><span class='line'><span class="o">#</span> <span class="n">Enter</span> <span class="n">it</span> <span class="n">again</span><span class="p">:</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you are finished, press <code>Ctrl + D</code> to terminate the psql session. Next we need to allow communication to the Postgres server from our Rails app. Let&rsquo;s open up the default configuration:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="err">$</span> <span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="mi">9</span><span class="p">.</span><span class="mi">1</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">postgresql</span><span class="p">.</span><span class="n">conf</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We are looking for a block that is commented out that allows localhost connections. Uncomment the line like so:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">- #listen_addresses = &#39;localhost&#39;</span>
-</span><span class='line'><span class="gi">+ listen_addresses = &#39;localhost&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All we need now is a Postgres server reboot:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>$ sudo service postgresql restart
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Passenger + Nginx Installation</h3>
-
-<p>My favorite app-server + web-server are Passenger and Nginx due to the ease of installation. First we will install the Passenger gem and setup the Nginx module.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>$ gem install passenger
-</span><span class='line'>$ rvmsudo passenger-install-nginx-module
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You will be presented with three choices. Choose Option 1 to automate the installation of Nginx. You might have some missing package dependencies, follow the installation instructions for them and rerun <code>rvmsudo passenger-install-nginx-module</code></p>
-
-<p>Nginx is now installed and configured on your machine but it is recommended to install the following script to start, stop, or restart nginx.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>wget -O init-deb.sh http://library.linode.com/assets/660-init-deb.sh
-</span><span class='line'>mv init-deb.sh /etc/init.d/nginx
-</span><span class='line'>chmod +x /etc/init.d/nginx
-</span><span class='line'>/usr/sbin/update-rc.d -f nginx defaults
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The following commands will allow you to easily start or stop Nginx:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>sudo /etc/init.d/nginx stop
-</span><span class='line'>sudo /etc/init.d/nginx start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Congratulations, you are done with the first part of your VPS deployment. If you visit the ip address of your VPS, you will be greeted with the standard &ldquo;Welcome to nginx!&rdquo; page.</p>
-
-<p>Check back for Part two next week!</p>
-
-<h2>References</h2>
-
-<ul>
-<li><a href="https://help.ubuntu.com/community/PostgreSQL">Ubuntu PostgreSQL</a></li>
-<li><a href="https://library.linode.com/web-servers/nginx/installation/ubuntu-10.04-lucid">Nginx Init Script</a></li>
-</ul>
-
 
       
       
@@ -966,20 +712,6 @@ So you want to see what the hype is about? What are Turbolinks and Strong Parame
   })(window);
 </script>
 
-
-<script type="text/javascript">
-  var _gauges = _gauges || [];
-  (function() {
-    var t   = document.createElement('script');
-    t.type  = 'text/javascript';
-    t.async = true;
-    t.id    = 'gauges-tracker';
-    t.setAttribute('data-site-id', '5169d833f5a1f57960000072');
-    t.src = '//secure.gaug.es/track.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(t, s);
-  })();
-</script>
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

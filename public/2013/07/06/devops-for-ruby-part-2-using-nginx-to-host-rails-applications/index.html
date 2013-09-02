@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications">
+  <link rel="canonical" href="http://blog.fdp.io/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications">
   <link href="/favicon.ico" rel="icon">
   <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
@@ -114,7 +114,7 @@
 </header>
   <div class="row-fluid">
     <div class="span12">
-      <p>In <a href="http://blog.nanoxd.net/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
+      <p>In <a href="http://blog.fdp.io/2013/06/23/devops-for-ruby-part-1-vps-and-ubuntu-installation/">DevOps for Ruby Part 1</a>, we set up a new VPS with all of the software needed to serve Ruby on Rails applications. In this post we will be setting up two Rails application with seperate PostgreSQL databases.</p>
 
 <h2>Objectives</h2>
 
@@ -293,8 +293,8 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The two Passenger settings that have to suit your machine are:<br/>
-<code>passenger_root</code> &ndash; Specifies where Passenger is<br/>
+<p>The two Passenger settings that have to suit your machine are:
+<code>passenger_root</code> &ndash; Specifies where Passenger is
 <code>passenger_ruby</code> &ndash; Tells Passenger what version of Ruby to use.</p>
 
 <p>We created two server settings for each application. Here is what each setting means:</p>
@@ -449,8 +449,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/';
-        var disqus_url = 'http://blog.nanoxd.net/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/';
+        var disqus_identifier = 'http://blog.fdp.io/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/';
+        var disqus_url = 'http://blog.fdp.io/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/';
         var disqus_script = 'embed.js';
       
     (function () {
@@ -506,20 +506,6 @@
   })(window);
 </script>
 
-
-<script type="text/javascript">
-  var _gauges = _gauges || [];
-  (function() {
-    var t   = document.createElement('script');
-    t.type  = 'text/javascript';
-    t.async = true;
-    t.id    = 'gauges-tracker';
-    t.setAttribute('data-site-id', '5169d833f5a1f57960000072');
-    t.src = '//secure.gaug.es/track.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(t, s);
-  })();
-</script>
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

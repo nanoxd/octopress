@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: postgres - NanoXD's Random Ramblings</title>
+  <title>NanoXD's Random Ramblings</title>
   <meta name="author" content="Fernando Paredes">
 
   
-  <meta name="description" content="Category: postgres">
+  <meta name="description" content="NanoXD&#8217;s Random Ramblings Apr 12th, 2013 Comments git Ammending git commits During the past few years of using git, I&rsquo;ve come across &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.fdp.ioblog/categories/postgres">
+  <link rel="canonical" href="http://blog.fdp.io/blog/page/3">
   <link href="/favicon.ico" rel="icon">
   <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
@@ -90,61 +90,117 @@
     <div class="span12">
       <div class="row-fluid">
         <div id="content">
-          <article role="article">
-  
-  <header>
-    <div class="jumbotron">
-      Category: Postgres
-    </div>
-    
-  </header>
-  
-  <div id="blog-archives" class="category">
+          <div class="jumbotron">
+  <div class="container">
+    NanoXD&#8217;s
+    <h3 class="tagline">Random Ramblings</h3>
+  </div>
+</div>
 
+
+<div class="blog-index">
   
+  
+  
+    <article>
+      
+
   <div class="row-fluid">
-    <div class="span1">
-  	
-  	
-  	  
-  	    <h2>2013</h2>
-  	
+    <div class="span2">
+		<h1 class="date-time">
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2013-04-12T08:11:00-07:00" pubdate data-updated="true">Apr 12<span>th</span>, 2013</time></h5>
+          <div class="row-fluid">
+          
+          <a href="http://blog.fdp.io/2013/04/12/extremely-useful-git-commands/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
+          
+          </div>
+          
+          <div class="row-fluid">
+          
+          <a href="/blog/categories/git/"><span class="badge">git</span></a>
+          
+          </div>
+          
     </div>
-    <div class="span11">
-      <article>
-  	
-<div class="row-fluid">
-	<div class="span1">
-		<h1 class="date-time"><time datetime="2013-05-23T14:57:00-07:00" pubdate><span class='month'>May</span> <span class='day'>23</span><span class='year'><!--2013--></span></time></h1>
-	</div>
-	<div class="span10">
-		<h1><a href="/2013/05/23/setup-postgresql-for-rails-on-a-mac/">Setup PostgreSQL for Rails on a Mac</a></h1>
-	</div>
-</div>
+    <div class="span10">
+      <h1 class="link"><a href="/2013/04/12/extremely-useful-git-commands/">Ammending git commits</a></h1>
+      <p>During the past few years of using git, I&rsquo;ve come across several commands which have become pivotal in my workflow. One of them is <code>git commit --amend</code>.</p>
 
-<div class="row-fluid">
-	<div class="span1">
-	</div>
-	<div class="span10">
-		
+<h2>Amending a commit</h2>
 
-		<footer class="archive">
-		  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/sql/'>SQL</a>, <a class='category' href='/blog/categories/setup/'>Setup</a>, <a class='category' href='/blog/categories/postgres/'>postgres</a></span>
-		</footer>
-		
-	</div>
-</div>
+<p>How many times have you inadvertantly forgotten to include a file in your last commit? I know my <a href="http://github.com">Github</a> can attest to my forgetfullness. We will first start out by creating a file named <code>help.md</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#Help
+</span><span class='line'>Nothing can stop the man with the right mental attitude from achieving his goal; nothing on
+</span><span class='line'>earth can help the man with the wrong mental attitude.</span></code></pre></td></tr></table></div></figure>
 
 
-  	</article>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add help.md
+</span><span class='line'>git commit -m <span class="s2">&quot;Add help file&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It seems we forgot to include some text in the help file. To fix it we will append the information to the end of the file using the <code>echo</code> command.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s1">&#39;You can also contact me at foo@bar.com&#39;</span> &gt;&gt; hello.md
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can now add it back to the list of tracked files and amend your commit using the following</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add help.md
+</span><span class='line'>git commit --amend -m <span class="s2">&quot;Add contact information to help file&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Congratulations, you have successfully amended a commit!</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://git-scm.com/book/en/Git-Basics-Undoing-Things">Git-SCM</a></li>
+</ul>
+
+
+      
+      
     </div>
   </div>
 
+
+
+    </article>
+    
+  
+  <div class="pagination">
+    
+
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
 </div>
-
-</article>
-
-
 
 
         </div>

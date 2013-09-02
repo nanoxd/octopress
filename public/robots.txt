@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://blog.nanoxd.net/sitemap.xml 
+Sitemap: http://blog.fdp.io/sitemap.xml 

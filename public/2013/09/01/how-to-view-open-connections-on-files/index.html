@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Make iTerm 2 work with Mac OSX movement keyboard shortcuts - NanoXD's Random Ramblings</title>
+  <title>How to view open connections on files - NanoXD's Random Ramblings</title>
   <meta name="author" content="Fernando Paredes">
 
   
-  <meta name="description" content="Make iTerm 2 Work With Mac OSX Movement Keyboard Shortcuts Aug 4th, 2013 After transitioning from Terminal to iTerm 2, you may notice commands like &hellip;">
+  <meta name="description" content="How to View Open Connections on Files Sep 1st, 2013 During a pairing session on Ruby, we had an issue with what file the API was stuck on. Luckily, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.fdp.io/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts">
+  <link rel="canonical" href="http://blog.fdp.io/2013/09/01/how-to-view-open-connections-on-files">
   <link href="/favicon.ico" rel="icon">
   <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
@@ -96,7 +96,7 @@
 
   <header>
   <div class="jumbotron">
-    Make iTerm 2 Work With Mac OSX Movement Keyboard Shortcuts
+    How to View Open Connections on Files
 	<h5>
 
 
@@ -109,71 +109,87 @@
   
 
 
-<i class="icon-calendar-empty"></i> <time datetime="2013-08-04T12:17:00-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2013</time></h5>
+<i class="icon-calendar-empty"></i> <time datetime="2013-09-01T20:01:00-07:00" pubdate data-updated="true">Sep 1<span>st</span>, 2013</time></h5>
   </div>
 </header>
   <div class="row-fluid">
     <div class="span12">
-      <p>After transitioning from Terminal to iTerm 2, you may notice commands like &#8997; + &#8592; (moves left one word) and &#8984; + &#8592; (moves to the beginning of the line) no longer work.</p>
+      <p>During a pairing session on Ruby, we had an issue with what file the API was stuck on. Luckily, there is a command <code>lsof</code> which stands for list open files.</p>
 
-<p>It is very simple process to add the keyboard shortcuts to your profile. Here are the keyboard shortcuts we are adding:</p>
+<h2>Usage</h2>
 
-<table>
-<thead>
-<tr>
-<th></th>
-<th align="center"> Keyboard Shortcut </th>
-<th align="center">            Description            </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td align="center"> &#8997; + &#8592; </td>
-<td align="center"> Move one word to the left         </td>
-</tr>
-<tr>
-<td></td>
-<td align="center"> &#8997; + &#8594; </td>
-<td align="center"> Move one word to the right        </td>
-</tr>
-<tr>
-<td></td>
-<td align="center"> &#8984; + &#8592; </td>
-<td align="center"> Move to the beginning of the line </td>
-</tr>
-<tr>
-<td></td>
-<td align="center"> &#8984; + &#8594; </td>
-<td align="center"> Move to the end of the line       </td>
-</tr>
-</tbody>
-</table>
+<p>When <code>lsof</code> is ran without parameters, it will show all the files opened by <em>any</em> process. It can get a bit messy, so I recommend <code>grep</code>ing through to find the file/process you want.</p>
+
+<p>To find out what files Ruby has opened you can use <code>lsof -c</code>. Here is what it looks like when running <code>rails server</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof -c ruby
+</span><span class='line'>ruby    55222 nano   10w   REG    1,1   1214625 34875337 ~/Developer/Projects/contact-manager/log/development.log
+</span><span class='line'>ruby    55222 nano   11u   REG    1,1     49152 34875460 ~/Developer/Projects/contact-manager/db/development.sqlite3
+</span></code></pre></td></tr></table></div></figure>
 
 
-<h4>1. Open Preferences</h4>
+<p>To find out what is accessing any file in a directory, use the <code>lsof +D /usr/directory</code></p>
 
-<p><img class="center" src="http://f.cl.ly/items/3f3m200t0h3x2o1F3C07/Image%202013.08.04%2012%3A44%3A16%20PM.png" title="'iTerm Preferences'" ></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof +D /Users/nano/Developer/Projects/contact-manager
+</span><span class='line'>vim     44957 nano  cwd    DIR    1,1      748 34873022 ~/Developer/Projects/contact-manager
+</span></code></pre></td></tr></table></div></figure>
 
-<h4>2. Click on Profiles</h4>
 
-<p>Find the Keys header and click on the <code>+</code> sign to add a new shortcut key.</p>
+<p>You can list all opened internet sockets using <code>lsof -i</code>.</p>
 
-<p><img src="http://f.cl.ly/items/0M1L3D0T1K0s0w083K0g/Image%202013.08.04%201%3A12%3A54%20PM.png"></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof -i :62658
+</span><span class='line'>Rdio      63484 nano   23u  IPv4 0x2674679fdf954c9b      0t0  TCP 10.0.1.14:62658-&gt;8.18.203.81:sunproxyadmin <span class="o">(</span>ESTABLISHED<span class="o">)</span>
+</span><span class='line'><span class="c"># We can find out the process id for Unicorn running on port 8080</span>
+</span><span class='line'><span class="nv">$ </span>lsof -i :8080
+</span><span class='line'>COMMAND   PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+</span><span class='line'>ruby    54171 nano    9u  IPv4 0x2674679fe1b36243      0t0  TCP *:http-alt <span class="o">(</span>LISTEN<span class="o">)</span>
+</span><span class='line'>ruby    54172 nano    9u  IPv4 0x2674679fe1b36243      0t0  TCP *:http-alt <span class="o">(</span>LISTEN<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h4>3. Add Keyboard shortcuts</h4>
 
-<p>Enter each of the following shortcuts below:</p>
+<p>After finding the process id, you can find out what that process is accessing using <code>lsof +p PID</code></p>
 
-<p><img src="http://f.cl.ly/items/1A3z3a1r1j0i1R1F1G1K/Image%202013.08.04%201%3A16%3A54%20PM.png" title="'Option + Left'" ></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>lsof +p 79766
+</span><span class='line'>COMMAND   PID USER   FD   TYPE             DEVICE  SIZE/OFF     NODE NAME
+</span><span class='line'>ruby    54172 nano  cwd    DIR                1,1       748 34873022 ~/Developer/Projects/contact-manager
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1      9184 17640590 ~/.rvm/rubies/ruby-2.0.0-p247/bin/ruby
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1   2793108 17640592 ~/.rvm/rubies/ruby-2.0.0-p247/lib/libruby.2.0.0.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1    118244   615195 /usr/local/Cellar/libyaml/0.1.4/lib/libyaml-0.2.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1    378152   797957 /usr/local/Cellar/openssl/1.0.1e/lib/libssl.1.0.0.dylib
+</span><span class='line'>ruby    54172 nano  txt    REG                1,1   1663200   797956 /usr/local/Cellar/openssl/1.0.1e/lib/libcrypto.1.0.0.dylib
+</span></code></pre></td></tr></table></div></figure>
 
-<p><img src="http://f.cl.ly/items/262F1F2y3E0X021I2d3v/Image%202013.08.04%201%3A26%3A57%20PM.png" title="'Option + Right'" ></p>
 
-<p><img src="http://f.cl.ly/items/1l3G0d2A0n1X0r1V0h3s/Image%202013.08.04%201%3A21%3A29%20PM.png" title="'Command + Left'" ></p>
+<p>Using several commands leads you to any files that may be <em>stuck</em> in processing. I have found that it is an essential tool in debugging a multitude of issues.</p>
 
-<p><img src="http://f.cl.ly/items/223X1L3H1M1p2P2U1C3x/Image%202013.08.04%201%3A22%3A54%20PM.png" title="'Command + Right" ></p>
+<h2>References</h2>
 
-<p>Congratulations, you can now move around in iTerm 2 just like Terminal!</p>
+<ul>
+<li><a href="http://www.catonmat.net/blog/unix-utilities-lsof/">A Unix Utility You Should Know About: lsof</a></li>
+<li><a href="http://linux.die.net/man/8/lsof">man lsof</a></li>
+<li><a href="http://stackoverflow.com/questions/106234/lsof-survival-guide">lsof Survival Guide</a></li>
+</ul>
+
 
     </div>
   </div>
@@ -192,11 +208,11 @@
 
 
 
-  <a href="/blog/categories/MacApps/"><span class="badge">MacApps</span></a>
+  <a href="/blog/categories/CLI/"><span class="badge">CLI</span></a>
 
-  <a href="/blog/categories/Terminal/"><span class="badge">Terminal</span></a>
+  <a href="/blog/categories/Debugging/"><span class="badge">Debugging</span></a>
 
-  <a href="/blog/categories/iTerm2/"><span class="badge">iTerm2</span></a>
+  <a href="/blog/categories/Linux/"><span class="badge">Linux</span></a>
 
 
 
@@ -228,10 +244,8 @@
       <div class="span12">
         <p class="meta">
           
-            <a class="basic-alignment left" href="/2013/07/06/devops-for-ruby-part-2-using-nginx-to-host-rails-applications/" title="Previous Post: DevOps for Ruby Part 2: Using Nginx to Host Rails Applications">&laquo; DevOps for Ruby Part 2: Using Nginx to Host Rails Applications</a>
+            <a class="basic-alignment left" href="/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/" title="Previous Post: Make iTerm 2 work with Mac OSX movement keyboard shortcuts">&laquo; Make iTerm 2 work with Mac OSX movement keyboard shortcuts</a>
           
-          
-            <a class="basic-alignment right" href="/2013/09/01/how-to-view-open-connections-on-files/" title="Next Post: How to view open connections on files">How to view open connections on files &raquo;</a>
           
         </p>
       </div>
@@ -270,8 +284,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://blog.fdp.io/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/';
-        var disqus_url = 'http://blog.fdp.io/2013/08/04/make-iterm-2-work-with-mac-osx-movement-keyboard-shortcuts/';
+        var disqus_identifier = 'http://blog.fdp.io/2013/09/01/how-to-view-open-connections-on-files/';
+        var disqus_url = 'http://blog.fdp.io/2013/09/01/how-to-view-open-connections-on-files/';
         var disqus_script = 'embed.js';
       
     (function () {
