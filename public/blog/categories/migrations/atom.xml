@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Migrations | NanoXD's Random Ramblings]]></title>
+  <link href="http://blog.fdp.io/blog/categories/migrations/atom.xml" rel="self"/>
+  <link href="http://blog.fdp.io/"/>
+  <updated>2013-09-15T20:38:28-07:00</updated>
+  <id>http://blog.fdp.io/</id>
+  <author>
+    <name><![CDATA[Fernando Paredes]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rails 4: Easily Add Reference to Migration]]></title>
+    <link href="http://blog.fdp.io/2013/09/15/rails-4-easily-add-reference-to-migration/"/>
+    <updated>2013-09-15T19:29:00-07:00</updated>
+    <id>http://blog.fdp.io/2013/09/15/rails-4-easily-add-reference-to-migration</id>
+    <content type="html"><![CDATA[<p>While working on a Rails 4 application, I came across a new addition to migrations <code>add_reference</code>. <code>add_reference</code> makes it easier to create migrations for foreign keys.</p>
+
+<h2>Rails 3</h2>
+
+<p>In Rails 3, to add a foreign key and an index you would write a migration like this:</p>
+
+<p>```ruby
+class AddUserToBooks &lt; ActiveRecord::Migration
+  def change</p>
+
+<pre><code>add_column :books, :user_id, :integer
+add_index  :books, :user_id
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>It requires two method calls, one to add the <code>user_id</code> column to the Books table, and another to add an index to <code>user_id</code>.</p>
+
+<h2>Rails 4</h2>
+
+<p>In Rails 4, you can accomplish the same thing with <code>add_reference</code>:</p>
+
+<p>```ruby
+class AddUserToBooks &lt; ActiveRecord::Migration
+  def change</p>
+
+<pre><code>add_reference :books, :user, index: true
+</code></pre>
+
+<p>  end
+end
+```
+Surround your pullquote like this {" text to be quoted "}</p>
+]]></content>
+  </entry>
+  
+</feed>

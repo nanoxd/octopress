@@ -4,7 +4,7 @@
   <title><![CDATA[NanoXD's Random Ramblings]]></title>
   <link href="http://blog.fdp.io/atom.xml" rel="self"/>
   <link href="http://blog.fdp.io/"/>
-  <updated>2013-09-02T09:47:01-07:00</updated>
+  <updated>2013-09-15T20:38:28-07:00</updated>
   <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails 4: Easily Add Reference to Migration]]></title>
+    <link href="http://blog.fdp.io/2013/09/15/rails-4-easily-add-reference-to-migration/"/>
+    <updated>2013-09-15T19:29:00-07:00</updated>
+    <id>http://blog.fdp.io/2013/09/15/rails-4-easily-add-reference-to-migration</id>
+    <content type="html"><![CDATA[<p>While working on a Rails 4 application, I came across a new addition to migrations <code>add_reference</code>. <code>add_reference</code> makes it easier to create migrations for foreign keys.</p>
+
+<h2>Rails 3</h2>
+
+<p>In Rails 3, to add a foreign key and an index you would write a migration like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AddUserToBooks</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">add_column</span> <span class="ss">:books</span><span class="p">,</span> <span class="ss">:user_id</span><span class="p">,</span> <span class="ss">:integer</span>
+</span><span class='line'>    <span class="n">add_index</span>  <span class="ss">:books</span><span class="p">,</span> <span class="ss">:user_id</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It requires two method calls, one to add the <code>user_id</code> column to the Books table, and another to add an index to <code>user_id</code>.</p>
+
+<h2>Rails 4</h2>
+
+<p>In Rails 4, you can accomplish the same thing with <code>add_reference</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AddUserToBooks</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">add_reference</span> <span class="ss">:books</span><span class="p">,</span> <span class="ss">:user</span><span class="p">,</span> <span class="ss">index</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><span class='pullquote-right' data-pullquote='&#8220;Ruby is designed to make programmers happy.&#8221; - Yukihiro Matsumoto'>
+While it isn&rsquo;t a major change, it further illustrates the foundation that Ruby was built upon. &ldquo;Ruby is designed to make programmers happy.&rdquo; &ndash; Yukihiro Matsumoto
+</span></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to view open connections on files]]></title>
