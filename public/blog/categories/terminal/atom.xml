@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Terminal | NanoXD's Random Ramblings]]></title>
   <link href="http://blog.fdp.io/blog/categories/terminal/atom.xml" rel="self"/>
   <link href="http://blog.fdp.io/"/>
-  <updated>2013-09-15T20:38:28-07:00</updated>
+  <updated>2013-12-07T22:19:59-08:00</updated>
   <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
@@ -57,25 +57,25 @@
 
 <h4>1. Open Preferences</h4>
 
-<p><img class="center <a" src="href="http://f.cl.ly/items/3f3m200t0h3x2o1F3C07/Image%202013.08.04%2012%3A44%3A16%20PM.png">http://f.cl.ly/items/3f3m200t0h3x2o1F3C07/Image%202013.08.04%2012%3A44%3A16%20PM.png</a>" title="&lsquo;iTerm Preferences&rsquo;" ></p>
+<p>{% img center <a href="http://f.cl.ly/items/3f3m200t0h3x2o1F3C07/Image%202013.08.04%2012%3A44%3A16%20PM.png">http://f.cl.ly/items/3f3m200t0h3x2o1F3C07/Image%202013.08.04%2012%3A44%3A16%20PM.png</a> &lsquo;iTerm Preferences&rsquo; %}</p>
 
 <h4>2. Click on Profiles</h4>
 
 <p>Find the Keys header and click on the <code>+</code> sign to add a new shortcut key.</p>
 
-<p><img class="<a" src="href="http://f.cl.ly/items/0M1L3D0T1K0s0w083K0g/Image%202013.08.04%201%3A12%3A54%20PM.png">http://f.cl.ly/items/0M1L3D0T1K0s0w083K0g/Image%202013.08.04%201%3A12%3A54%20PM.png</a>"></p>
+<p>{% img <a href="http://f.cl.ly/items/0M1L3D0T1K0s0w083K0g/Image%202013.08.04%201%3A12%3A54%20PM.png">http://f.cl.ly/items/0M1L3D0T1K0s0w083K0g/Image%202013.08.04%201%3A12%3A54%20PM.png</a> %}</p>
 
 <h4>3. Add Keyboard shortcuts</h4>
 
 <p>Enter each of the following shortcuts below:</p>
 
-<p><img class="<a" src="href="http://f.cl.ly/items/1A3z3a1r1j0i1R1F1G1K/Image%202013.08.04%201%3A16%3A54%20PM.png">http://f.cl.ly/items/1A3z3a1r1j0i1R1F1G1K/Image%202013.08.04%201%3A16%3A54%20PM.png</a>" title="&lsquo;Option + Left&rsquo;" ></p>
+<p>{% img <a href="http://f.cl.ly/items/1A3z3a1r1j0i1R1F1G1K/Image%202013.08.04%201%3A16%3A54%20PM.png">http://f.cl.ly/items/1A3z3a1r1j0i1R1F1G1K/Image%202013.08.04%201%3A16%3A54%20PM.png</a> &lsquo;Option + Left&rsquo; %}</p>
 
-<p><img class="<a" src="href="http://f.cl.ly/items/262F1F2y3E0X021I2d3v/Image%202013.08.04%201%3A26%3A57%20PM.png">http://f.cl.ly/items/262F1F2y3E0X021I2d3v/Image%202013.08.04%201%3A26%3A57%20PM.png</a>" title="&lsquo;Option + Right&rsquo;" ></p>
+<p>{% img <a href="http://f.cl.ly/items/262F1F2y3E0X021I2d3v/Image%202013.08.04%201%3A26%3A57%20PM.png">http://f.cl.ly/items/262F1F2y3E0X021I2d3v/Image%202013.08.04%201%3A26%3A57%20PM.png</a> &lsquo;Option + Right&rsquo; %}</p>
 
-<p><img class="<a" src="href="http://f.cl.ly/items/1l3G0d2A0n1X0r1V0h3s/Image%202013.08.04%201%3A21%3A29%20PM.png">http://f.cl.ly/items/1l3G0d2A0n1X0r1V0h3s/Image%202013.08.04%201%3A21%3A29%20PM.png</a>" title="&lsquo;Command + Left&rsquo;" ></p>
+<p>{% img <a href="http://f.cl.ly/items/1l3G0d2A0n1X0r1V0h3s/Image%202013.08.04%201%3A21%3A29%20PM.png">http://f.cl.ly/items/1l3G0d2A0n1X0r1V0h3s/Image%202013.08.04%201%3A21%3A29%20PM.png</a> &lsquo;Command + Left&rsquo; %}</p>
 
-<p><img class="<a" src="href="http://f.cl.ly/items/223X1L3H1M1p2P2U1C3x/Image%202013.08.04%201%3A22%3A54%20PM.png">http://f.cl.ly/items/223X1L3H1M1p2P2U1C3x/Image%202013.08.04%201%3A22%3A54%20PM.png</a>" title="&lsquo;Command + Right" ></p>
+<p>{% img <a href="http://f.cl.ly/items/223X1L3H1M1p2P2U1C3x/Image%202013.08.04%201%3A22%3A54%20PM.png">http://f.cl.ly/items/223X1L3H1M1p2P2U1C3x/Image%202013.08.04%201%3A22%3A54%20PM.png</a> &lsquo;Command + Right %}</p>
 
 <p>Congratulations, you can now move around in iTerm 2 just like Terminal!</p>
 ]]></content>

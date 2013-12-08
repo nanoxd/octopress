@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | NanoXD's Random Ramblings]]></title>
   <link href="http://blog.fdp.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://blog.fdp.io/"/>
-  <updated>2013-09-15T20:38:28-07:00</updated>
+  <updated>2013-12-07T22:19:59-08:00</updated>
   <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
@@ -24,18 +24,13 @@
 
 <p>How many times have you inadvertantly forgotten to include a file in your last commit? I know my <a href="http://github.com">Github</a> can attest to my forgetfullness. We will first start out by creating a file named <code>help.md</code></p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;h1>Help&lt;/h1>
-</span><span class='line'>
-</span><span class='line'>&lt;p>Nothing can stop the man with the right mental attitude from achieving his goal; nothing on
-</span><span class='line'>earth can help the man with the wrong mental attitude.</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock %}</p>
+
+<h1>Help</h1>
+
+<p>Nothing can stop the man with the right mental attitude from achieving his goal; nothing on
+earth can help the man with the wrong mental attitude.
+{% endcodeblock %}</p>
 
 <p><code>bash
 git add help.md
