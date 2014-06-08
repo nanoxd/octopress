@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | NanoXD's Random Ramblings]]></title>
   <link href="http://blog.fdp.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://blog.fdp.io/"/>
-  <updated>2014-06-07T22:06:21-07:00</updated>
+  <updated>2014-06-07T22:23:08-07:00</updated>
   <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
@@ -322,7 +322,7 @@ $ source ~/.rvm/scripts/rvm</p>
 
 <p>$ rvm -v</p>
 
-<h1>=> rvm 1.21.2 (stable) by Wayne E. Seguin <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x77;&#x61;&#x79;&#x6e;&#x65;&#101;&#115;&#101;&#103;&#117;&#105;&#110;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#119;&#x61;&#x79;&#x6e;&#101;&#x65;&#115;&#101;&#x67;&#x75;&#x69;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a>, Michal Papis <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#109;&#x70;&#x61;&#x70;&#x69;&#115;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#x6d;&#112;&#x61;&#112;&#x69;&#115;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a> [<a href="https://rvm.io/">https://rvm.io/</a>]</h1>
+<h1>=> rvm 1.21.2 (stable) by Wayne E. Seguin <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x77;&#x61;&#121;&#110;&#101;&#101;&#x73;&#101;&#x67;&#117;&#105;&#110;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#119;&#x61;&#121;&#110;&#x65;&#101;&#x73;&#x65;&#x67;&#117;&#105;&#x6e;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a>, Michal Papis <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#109;&#x70;&#97;&#x70;&#x69;&#x73;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;">&#109;&#112;&#97;&#x70;&#105;&#115;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a> [<a href="https://rvm.io/">https://rvm.io/</a>]</h1>
 
 <p><code>
 In order to work, RVM has some of its own dependancies that need to be installed. You can install and see what they are using:

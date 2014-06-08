@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Migrations | NanoXD's Random Ramblings]]></title>
   <link href="http://blog.fdp.io/blog/categories/migrations/atom.xml" rel="self"/>
   <link href="http://blog.fdp.io/"/>
-  <updated>2014-06-07T22:06:21-07:00</updated>
+  <updated>2014-06-07T22:23:08-07:00</updated>
   <id>http://blog.fdp.io/</id>
   <author>
     <name><![CDATA[Fernando Paredes]]></name>
@@ -52,9 +52,7 @@ class AddUserToBooks &lt; ActiveRecord::Migration
 <p>  end
 end
 ```
-{% pullquote %}
-While it isn&rsquo;t a major change, it further illustrates the foundation that Ruby was built upon. {&ldquo; "Ruby is designed to make programmers happy.&rdquo; &ndash; Yukihiro Matsumoto &ldquo;}
-{% endpullquote %}</p>
+Surround your pullquote like this {" text to be quoted "}</p>
 ]]></content>
   </entry>
   
