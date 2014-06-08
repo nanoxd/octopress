@@ -106,7 +106,5 @@ facebook_like: false
 navigation:
 - text: Home
   url: /index.html
-- text: Resume
-  url: http://fdp.io
 - text: E-Mail
   url: mailto:nano@fdp.io
